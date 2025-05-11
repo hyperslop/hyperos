@@ -1,34 +1,33 @@
-# Edit this configuration file to define what should be installed on
-# your system.  Help is available in the configuration.nix(5) man page
-# and in the NixOS manual (accessible by running ‘nixos-help’).
+# Help is available in the configuration.nix(5) man page
+# NixOS manual is accessible by running ‘nixos-help’
 
 { config, pkgs, inputs, ... }:
 
 {
   imports =
-    [ # Include the results of the hardware scan.
+    [
       ./hardware-configuration.nix
-      inputs.home-manager.nixosModules.default
+      inputs.home-manager.nixosModules.default #home.nix
     ];
 
   # Bootloader.
+
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
-  networking.hostName = "nixos"; # Define your hostname.
- # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
+  # Networking
 
-  # Configure network proxy if necessary
+  networking.hostName = "nixos"; # Define your hostname.
+  # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
+
+  # Configure network proxy
   # networking.proxy.default = "http://user:password@proxy:port/";
   # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
 
-  # Enable networking
+  # Initial Settings
+
   networking.networkmanager.enable = true;
-
-  # Set your time zone.
   time.timeZone = "America/Los_Angeles";
-
-  # Select internationalisation properties.
   i18n.defaultLocale = "en_US.UTF-8";
 
   i18n.extraLocaleSettings = {
@@ -43,31 +42,21 @@
     LC_TIME = "en_US.UTF-8";
   };
 
-  #allow broken packages? not sure, but python is broken.
-  nixpkgs.config.allowBroken = true;
+  # Display Protocol
 
-  # Enable the X11 windowing system.
-  # You can disable this if you're only using the Wayland session.
-  services.xserver.enable = true;
+  services.xserver.enable = true; #Enables X11
 
-  # Enable the KDE Plasma Desktop Environment.
-  services.displayManager.sddm.enable = true;
-  services.desktopManager.plasma6.enable = true;
+  # Desktop Environment
 
-  # Enable Hyprland
+  services.displayManager.sddm.enable = true; #Enables SDDM Display Manager/Login Manager
+
+  services.desktopManager.plasma6.enable = true; #Enables KDE Plasma Desktop
+
   programs.hyprland.enable = true;
-  #programs.hyprland.package = inputs.hyprland.packages."${pkgs.system}".hyprland; //leave off prob but use to troubleshoot if you need idk exactly what it is
+  #programs.hyprland.package = inputs.hyprland.packages."${pkgs.system}".hyprland;
 
-  #Configure keymap in X11
-  services.xserver.xkb = {
-    layout = "us";
-    variant = "";
-  };
+  # Sound Settings
 
-  # Enable CUPS to print documents.
-  services.printing.enable = true;
-
-  # Enable sound with pipewire.
   services.pulseaudio.enable = false;
   security.rtkit.enable = true;
   services.pipewire = {
@@ -75,18 +64,28 @@
     alsa.enable = true;
     alsa.support32Bit = true;
     pulse.enable = true;
-    # If you want to use JACK applications, uncomment this
     jack.enable = true;
-
-    # use the example session manager (no others are packaged yet so this is enabled by default,
-    # no need to redefine it in your config for now)
-    #media-session.enable = true;
   };
 
-  # Enable touchpad support (enabled default in most desktopManager).
-  # services.xserver.libinput.enable = true;
+  # Misc Initial Settings
 
-  # Define a user account. Don't forget to set a password with ‘passwd’.
+  services.xserver.xkb = { # X11 Keyboard Settings
+    layout = "us";
+    variant = "";
+  };
+
+  services.printing.enable = true; # Enable CUPS to print documents.
+
+  nixpkgs.config.allowBroken = true; #Packages marked as broken, needed for python.
+
+  nixpkgs.config.allowUnfree = true; #Unfree packages (FOSS)
+
+  nix.settings.experimental-features = ["nix-command" "flakes"];
+
+  environment.sessionVariables.NIXOS_OZONE_WL = "1"; #Fix wayland issues for chromium/electron apps
+
+  # User Inital Settings
+
   users.users.hyperslop = {
     isNormalUser = true;
     description = "hyperslop";
@@ -98,106 +97,72 @@
     ];
   };
 
-  #home-manager
+  services.xserver.displayManager.autoLogin.enable = true;
+  services.xserver.displayManager.autoLogin.user = "hyperslop";
+
+  # Home Manager Initial Settings
+
   home-manager = {
     extraSpecialArgs = {inherit inputs; };
     users = {
       "hyperslop" = import ./home.nix;
     };
+    #Don't know what this does but it makes home manager work, fixes error message.
+    backupFileExtension = "backup";
   };
 
-  # Enable automatic login for the user.
-  services.xserver.displayManager.autoLogin.enable = true;
-  services.xserver.displayManager.autoLogin.user = "hyperslop";
-
-  # Install firefox.
-  programs.firefox.enable = true;
-
-  # Allow unfree packages
-  nixpkgs.config.allowUnfree = true;
-
-  nix.settings.experimental-features = ["nix-command" "flakes"];
-
-  environment.sessionVariables.NIXOS_OZONE_WL = "1";
-
-  programs.steam.enable = true;
+  # Misc Enabled Programs
+  programs.firefox.enable = true; #was here by default
+  programs.steam.enable = true; #steam don't launch without
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
     #tools:
-        #home-manager
-      #terminal tools
-      	neovim
-      	vim
-      	wget
-      	git
-      	htop
-      	libqalculate
-      	yt-dlp
-	kitty
-      #gui tools
-      	qalculate-qt
-	hyprland
-      #creative applications:
-        #image editing
-          gimp
-          krita
-        #music editing
-          reaper 
-	  #davinci-resolve # builds, takes over 15 minutes
-        #3D modelling
-          blender # 30 seconds
-          freecad
-          #cura # failes to build
-        #video game making
-          godot
-        #map making
-          worldpainter
-          qgis
-        #misc
-          projectm_3
-          mandelbulber
-    #media applications
-      #video games
-        steam
-        lutris
-        retroarch
-        prismlauncher
-      #music
-        spotify #replace with alternative at some point
-        ncspot
-        nicotine-plus
-      #social applications:
-        firefox
-        ungoogled-chromium
-        discord
-    #privacy applications:e
+      home-manager
+      neovim
+      vim
+      wget
+      git
+      htop
+      libqalculate
+      yt-dlp
+      fastfetch
+      kitty
+      projectm_3
+      mandelbulber
+      qalculate-qt
+      hyprland
+    #creative apps:
+      gimp
+      krita
+      reaper
+      blender
+      freecad
+      #cura # failes to build :(
+      #davinci-resolve # builds, takes to long, need pro for h264 i think anyway. figure out later.
+      godot
+      worldpainter
+      qgis
+    #media apps
+      steam
+      lutris
+      retroarch
+      prismlauncher
+      spotify #alternative client?
+      ncspot
+      nicotine-plus
+    #social apps
+      firefox
+      ungoogled-chromium
+      discord #alternative client?
+    #super secret! dont tell the feds!
       tor
       i2p
+      qbittorrent
       mullvad-vpn
       monero-gui
-      qbittorrent
   ];
-
-  # Some programs need SUID wrappers, can be configured further or are
-  # started in user sessions.
-  # programs.mtr.enable = true;
-  # programs.gnupg.agent = {
-  #   enable = true;
-  #   enableSSHSupport = true;
-  # };
-
-  # List services that you want to enable:
-
-  # Enable the OpenSSH daemon.
-  # services.openssh.enable = true;
-
-  # Open ports in the firewall.
-  # networking.firewall.allowedTCPPorts = [ ... ];
-  # networking.firewall.allowedUDPPorts = [ ... ];
-  # Or disable the firewall altogether.
-  # networking.firewall.enable = false;
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions

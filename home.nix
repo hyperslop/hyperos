@@ -11,9 +11,26 @@
     userName = "hyperslop";
     userEmail = "hyperslop@proton.me";
     extraConfig = {
+    #git default branch is master, on git hosting sites its main.
 	init.defaultBranch = "main";
+	#solves dubious ownership warning
 	safe.directory = "/etc/nixos/";
     };
+  };
+
+  programs.firefox = {
+    enable = true;
+    profiles = {
+      default2 = {
+#      id = 0;
+#      isDefault = true;
+#      };
+#      test = {
+#      id = 1;
+#      isDefault = false;
+      };
+    };
+
   };
 
   # This value determines the Home Manager release that your configuration is
