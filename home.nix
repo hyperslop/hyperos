@@ -21,13 +21,25 @@
   programs.firefox = {
     enable = true;
     profiles = {
-      default2 = {
-#      id = 0;
-#      isDefault = true;
-#      };
-#      test = {
-#      id = 1;
-#      isDefault = false;
+      hyperslop = {
+      id = 0;
+      isDefault = true;
+      };
+      school = {
+      id = 1;
+      isDefault = false;
+      };
+      work = {
+      id = 2;
+      isDefault = false;
+      };
+      misc = {
+      id = 3;
+      isDefault = false;
+      };
+      anon = {
+      id = 4;
+      isDefault = false;
       };
     };
 
