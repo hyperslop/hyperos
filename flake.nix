@@ -27,39 +27,19 @@
   };
 
   outputs = { self, nixpkgs, home-manager, ...}@inputs:
-    # use "nixos", or your hostname as the name of the configuration:
-    # it's a better practice than "default" shown in the video
-#	let
-#    		lib = nixpkgs.lib;
-#    		system = "x86_64-linux";
-#		pkgs = import nixpkgs { inherit system; };
-#    in {
-#    homeConfiguration = {
-#	hyperslop = home-manager.lib.homeManagerConfiguration {
-#	  inherit pkgs;
-#	  modules = [ ./home.nix ];
-#	};
-#	};
-#	};
-#
-#    let
-#    	system = "x86_64-linux";
-#	pkgs = nixpkgs.legacyPackages.${system};
-#    in
   let
     system = "x86_64-linux";
     pkgs = nixpkgs.legacyPackages.${system};
   in {
-    homeConfiguration."hyperslop" = home-manager.lib.homeManagerConfiguration {
+
+    homeConfiguration."hyperslop" = home-manager.lib.homeManagerConfiguration { #sets stuff up for home manager
       inherit pkgs;
 
       extraSpecialArgs = { inherit inputs; };
 
     };
 
-    #{
-
-    nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
+    nixosConfigurations.nixos = nixpkgs.lib.nixosSystem { #sets stuff up for nixos configuration
       specialArgs = {inherit inputs;};
       modules = [
         ./configuration.nix
