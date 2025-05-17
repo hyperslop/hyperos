@@ -6,8 +6,12 @@
 {
   imports =
     [
+<<<<<<< HEAD
       ./modules/firefox/sysfirefox.nix
       ./hardware/desktop0.nix
+=======
+      ./hardware-configuration.nix
+>>>>>>> github
       inputs.home-manager.nixosModules.default #home.nix
     ];
 

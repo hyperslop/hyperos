@@ -33,6 +33,7 @@
         "type": "github"
       }
     },
+<<<<<<< HEAD
     "firefox-addons": {
       "inputs": {
         "nixpkgs": [
@@ -55,6 +56,8 @@
         "type": "gitlab"
       }
     },
+=======
+>>>>>>> github
     "flake-compat": {
       "flake": false,
       "locked": {
@@ -415,7 +418,10 @@
     },
     "root": {
       "inputs": {
+<<<<<<< HEAD
         "firefox-addons": "firefox-addons",
+=======
+>>>>>>> github
         "home-manager": "home-manager",
         "hyprland": "hyprland",
         "nixpkgs": "nixpkgs"
