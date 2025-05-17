@@ -1,12 +1,9 @@
 { config, pkgs, inputs, ... }:
 
 {
-<<<<<<< HEAD
   imports = [
     ./modules/firefox/userfirefox.nix
   ];
-=======
->>>>>>> github
   # Home Manager needs a bit of information about you and the paths it should
   # manage.
   home.username = "hyperslop";
@@ -24,7 +21,6 @@
     };
   };
 
-<<<<<<< HEAD
   #programs.firefox = {
   #  enable = true;
   #  profiles = {
@@ -49,34 +45,6 @@
   #    };
   #  };
   #};
-=======
-  programs.firefox = {
-    enable = true;
-    profiles = {
-      hyperslop = {
-      id = 0;
-      isDefault = true;
-      };
-      school = {
-      id = 1;
-      isDefault = false;
-      };
-      work = {
-      id = 2;
-      isDefault = false;
-      };
-      misc = {
-      id = 3;
-      isDefault = false;
-      };
-      anon = {
-      id = 4;
-      isDefault = false;
-      };
-    };
-
-  };
->>>>>>> github
 
   # This value determines the Home Manager release that your configuration is
   # compatible with. This helps avoid breakage when a new Home Manager release
