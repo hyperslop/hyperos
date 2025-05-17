@@ -7,7 +7,7 @@
   imports =
     [
       ./modules/firefox/sysfirefox.nix
-      ./hardware-configuration.nix
+      ./hardware/desktop0.nix
       inputs.home-manager.nixosModules.default #home.nix
     ];
 
