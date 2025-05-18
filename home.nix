@@ -2,7 +2,7 @@
 
 {
   imports = [
-    ./modules/firefox/userfirefox.nix
+    ./home/firefox.nix
   ];
 
   home.username = "hyperslop";
