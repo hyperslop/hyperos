@@ -1,4 +1,3 @@
-# Help is available in the configuration.nix(5) man page
 # NixOS manual is accessible by running ‘nixos-help’
 
 { config, pkgs, inputs, ... }:
@@ -6,6 +5,7 @@
 {
   imports =
     [
+      ./system/nixpkgs.nix
       inputs.home-manager.nixosModules.default #home.nix
     ];
 
@@ -18,10 +18,6 @@
 
   networking.hostName = "nixos"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
-
-  # Configure network proxy
-  # networking.proxy.default = "http://user:password@proxy:port/";
-  # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
 
   # Initial Settings
 
@@ -117,62 +113,6 @@
   programs.steam.gamescopeSession.enable = true;
   programs.gamemode.enable = true;
 
-  # List packages installed in system profile. To search, run:
-  # $ nix search wget
-  environment.systemPackages = with pkgs; [
-    #tools:
-      home-manager
-      neovim
-      vim
-      wget
-      git
-      htop
-      libqalculate
-      yt-dlp
-      fastfetch
-      kitty
-      projectm_3
-      mandelbulber
-      qalculate-qt
-      hyprland
-    #creative apps:
-      gimp
-      krita
-      reaper
-      blender
-      freecad
-      #cura # failes to build :(
-      #davinci-resolve # builds, takes to long, need pro for h264 i think anyway. figure out later.
-      godot
-      worldpainter
-      qgis
-    #media apps
-      steam
-        mangohud
-      lutris
-      retroarch
-      prismlauncher
-      spotify #alternative client?
-      ncspot
-      nicotine-plus
-    #social apps
-      firefox
-      ungoogled-chromium
-      discord #alternative client?
-    #super secret! dont tell the feds!
-      tor
-      i2p
-      qbittorrent
-      mullvad-vpn
-      monero-gui
-  ];
-
-  # This value determines the NixOS release from which the default
-  # settings for stateful data, like file locations and database versions
-  # on your system were taken. It‘s perfectly fine and recommended to leave
-  # this value at the release version of the first install of this system.
-  # Before changing this value read the documentation for this option
-  # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
-  system.stateVersion = "24.11"; # Did you read the comment?
+  system.stateVersion = "24.11";
 
 }
