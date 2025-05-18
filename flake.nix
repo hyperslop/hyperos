@@ -42,7 +42,7 @@
     nixosConfigurations.desktop = nixpkgs.lib.nixosSystem { #setup for my desktop computer
       specialArgs = {inherit inputs;};
       modules = [
-        ./hardware/desktop0.nix
+        ./hardware/personal-desktop.nix
         ./configuration.nix
         inputs.home-manager.nixosModules.default
       ];
@@ -50,7 +50,7 @@
     nixosConfigurations.laptop = nixpkgs.lib.nixosSystem { #setup for my laptop computer
       specialArgs = {inherit inputs;};
       modules = [
-        ./hardware/laptop0.nix
+        ./hardware/personal-laptop.nix
         ./configuration.nix
         inputs.home-manager.nixosModules.default
       ];
