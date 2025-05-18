@@ -1,5 +1,4 @@
-{ config, pkgs, ... }:
-
+{ config, pkgs, inputs, ... }:
   let
     lock-false = {
       Value = false;
@@ -11,22 +10,12 @@
     };
   in
 {
-  programs = {
-    firefox = {
-      enable = true;
-      languagePacks = [ "de" "en-US" ];
 
-      /* ---- POLICIES ---- */
-      # Check about:policies#documentation for options.
+  programs.firefox = {
+    enable = true;
       policies = {
         DisableTelemetry = true;
         DisableFirefoxStudies = true;
-        EnableTrackingProtection = {
-          Value= true;
-          Locked = true;
-          Cryptomining = true;
-          Fingerprinting = true;
-        };
         DisablePocket = true;
         DisableFirefoxAccounts = true;
         DisableAccounts = true;
@@ -37,27 +26,12 @@
         DisplayBookmarksToolbar = "never"; # alternatives: "always" or "newtab"
         DisplayMenuBar = "default-off"; # alternatives: "always", "never" or "default-on"
         SearchBar = "unified"; # alternative: "separate"
-
-        /* ---- EXTENSIONS ---- */
-        # Check about:support for extension/add-on ID strings.
-        # Valid strings for installation_mode are "allowed", "blocked",
-        # "force_installed" and "normal_installed".
-        ExtensionSettings = {
-          #"*".installation_mode = "blocked"; # blocks all addons except the ones specified below
-          # uBlock Origin:
-          "uBlock0@raymondhill.net" = {
-            install_url = "https://addons.mozilla.org/firefox/downloads/latest/ublock-origin/latest.xpi";
-            installation_mode = "force_installed";
-          };
-          # Privacy Badger:
-          "jid1-MnnxcxisBPnSXQ@jetpack" = {
-            install_url = "https://addons.mozilla.org/firefox/downloads/latest/privacy-badger17/latest.xpi";
-            installation_mode = "force_installed";
-          };
+        EnableTrackingProtection = {
+          Value= true;
+          Locked = true;
+          Cryptomining = true;
+          Fingerprinting = true;
         };
-
-        /* ---- PREFERENCES ---- */
-        # Check about:config for options.
         Preferences = {
           "browser.contentblocking.category" = { Value = "strict"; Status = "locked"; };
           "extensions.pocket.enabled" = lock-false;
@@ -78,6 +52,31 @@
           "browser.newtabpage.activity-stream.system.showSponsored" = lock-false;
           "browser.newtabpage.activity-stream.showSponsoredTopSites" = lock-false;
         };
+      };
+
+    profiles = {
+      hyperslop = {
+      id = 0;
+      isDefault = true;
+      extensions.packages = with inputs.firefox-addons.packages."x86_64-linux"; [ #adds an extension for a specific browser profile, all profile extensions in sysfirefox.nix
+          #ublock-origin
+        ];
+      };
+      school = {
+        id = 1;
+        isDefault = false;
+      };
+      work = {
+        id = 2;
+        isDefault = false;
+      };
+      misc = {
+        id = 3;
+        isDefault = false;
+      };
+      anon = {
+        id = 4;
+        isDefault = false;
       };
     };
   };
