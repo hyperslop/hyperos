@@ -113,6 +113,9 @@
   programs.steam.gamescopeSession.enable = true;
   programs.gamemode.enable = true;
 
+  #mullvad vpn settings
+  services.mullvad-vpn.enable = true;
+  services.resolved.enable = true;
   system.stateVersion = "24.11";
 
 }

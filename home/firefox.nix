@@ -58,25 +58,47 @@
       hyperslop = {
       id = 0;
       isDefault = true;
-      extensions.packages = with inputs.firefox-addons.packages."x86_64-linux"; [ #adds an extension for a specific browser profile, all profile extensions in sysfirefox.nix
-          #ublock-origin
+      extensions.packages = with inputs.firefox-addons.packages."x86_64-linux"; [
+          ublock-origin
+          sponsorblock
+          darkreader
         ];
       };
       school = {
         id = 1;
         isDefault = false;
+        extensions.packages = with inputs.firefox-addons.packages."x86_64-linux"; [
+          ublock-origin
+          sponsorblock
+          darkreader
+        ];
       };
       work = {
         id = 2;
         isDefault = false;
+        extensions.packages = with inputs.firefox-addons.packages."x86_64-linux"; [
+          ublock-origin
+          sponsorblock
+          darkreader
+        ];
       };
       misc = {
         id = 3;
         isDefault = false;
+        extensions.packages = with inputs.firefox-addons.packages."x86_64-linux"; [
+          ublock-origin
+          sponsorblock
+          darkreader
+        ];
       };
       anon = {
         id = 4;
         isDefault = false;
+        extensions.packages = with inputs.firefox-addons.packages."x86_64-linux"; [
+          ublock-origin
+          sponsorblock
+          darkreader
+        ];
       };
     };
   };

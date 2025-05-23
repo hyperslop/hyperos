@@ -21,13 +21,14 @@
       vim
       libreoffice-qt-fresh
     #images
+      cheese
       #creative
       gimp
       krita
     #video
       vlc
       #creative
-        #davinci-resolve # builds, takes to long, need pro for h264 i think anyway. figure out later.
+        davinci-resolve # builds, takes to long, need pro for h264 i think anyway. figure out later.
     #music
       projectm_3
       #creative
