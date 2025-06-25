@@ -20,6 +20,9 @@
       neovim
       vim
       libreoffice-qt-fresh
+      jetbrains.idea-community-bin
+        #intellij-addons
+        github-copilot-intellij-agent
     #images
       cheese
       #creative
