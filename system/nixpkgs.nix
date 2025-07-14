@@ -11,6 +11,9 @@
     fastfetch
     libqalculate
     qalculate-qt
+    python3
+    distrobox
+    podman
 
   /******************* Media *******************/
   /* Tools for viewing or making media locally */
@@ -65,6 +68,7 @@
       spotify
       ncspot
       nicotine-plus
+      spotdl
     #games
       steam
     #general
@@ -74,6 +78,7 @@
       i2p
       #browsers
         firefox
+        mullvad-browser
         ungoogled-chromium
         tor
       #social

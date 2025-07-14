@@ -118,4 +118,10 @@
   services.resolved.enable = true;
   system.stateVersion = "24.11";
 
+  #podman settings
+  virtualisation.podman = {
+    enable = true;
+    dockerCompat = true;
+  };
+
 }

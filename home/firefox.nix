@@ -60,7 +60,9 @@
       isDefault = true;
       extensions.packages = with inputs.firefox-addons.packages."x86_64-linux"; [
           ublock-origin
+          privacy-badger
           sponsorblock
+          return-youtube-dislikes
           darkreader
         ];
       };
@@ -70,6 +72,7 @@
         extensions.packages = with inputs.firefox-addons.packages."x86_64-linux"; [
           ublock-origin
           sponsorblock
+          return-youtube-dislikes
           darkreader
         ];
       };
@@ -79,6 +82,7 @@
         extensions.packages = with inputs.firefox-addons.packages."x86_64-linux"; [
           ublock-origin
           sponsorblock
+          return-youtube-dislikes
           darkreader
         ];
       };
@@ -88,6 +92,7 @@
         extensions.packages = with inputs.firefox-addons.packages."x86_64-linux"; [
           ublock-origin
           sponsorblock
+          return-youtube-dislikes
           darkreader
         ];
       };
@@ -97,6 +102,7 @@
         extensions.packages = with inputs.firefox-addons.packages."x86_64-linux"; [
           ublock-origin
           sponsorblock
+          return-youtube-dislikes
           darkreader
         ];
       };
