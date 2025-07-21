@@ -43,6 +43,7 @@
       lutris
       retroarch
       prismlauncher
+      waydroid
       #creative
         godot
         worldpainter
