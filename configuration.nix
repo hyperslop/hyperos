@@ -16,7 +16,7 @@
 
   # Networking
 
-  networking.hostName = "nixos"; # Define your hostname.
+  networking.hostName = "os"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
   # Initial Settings
@@ -81,9 +81,9 @@
 
   # User Inital Settings
 
-  users.users.hyperslop = {
+  users.users.hyper = {
     isNormalUser = true;
-    description = "hyperslop";
+    description = "hyper";
     extraGroups = [ "networkmanager" "wheel" ];
     packages = with pkgs; [
       kdePackages.kate
@@ -93,14 +93,14 @@
   };
 
   services.xserver.displayManager.autoLogin.enable = true;
-  services.xserver.displayManager.autoLogin.user = "hyperslop";
+  services.xserver.displayManager.autoLogin.user = "hyper";
 
   # Home Manager Initial Settings
 
   home-manager = {
     extraSpecialArgs = {inherit inputs; };
     users = {
-      "hyperslop" = import ./home.nix;
+      "hyper" = import ./home.nix;
     };
     #Don't know what this does but it makes home manager work, fixes error message.
     backupFileExtension = "backup";
@@ -116,12 +116,13 @@
   #mullvad vpn settings
   services.mullvad-vpn.enable = true;
   services.resolved.enable = true;
-  system.stateVersion = "24.11";
 
   #podman settings
   virtualisation.podman = {
     enable = true;
     dockerCompat = true;
   };
+
+  system.stateVersion = "25.05";
 
 }

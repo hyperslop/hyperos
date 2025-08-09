@@ -3,7 +3,7 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
-
+    nixos-hardware.url = "github:NixOS/nixos-hardware/master";
     hyprland = {
 	url = "github:hyprwm/Hyprland";
 	inputs.nixpkgs.follows = "nixpkgs";
@@ -26,7 +26,7 @@
 
   };
 
-  outputs = { self, nixpkgs, home-manager, ...}@inputs:
+  outputs = { self, nixpkgs, home-manager, nixos-hardware, ...}@inputs:
   let
     system = "x86_64-linux";
     pkgs = nixpkgs.legacyPackages.${system};
@@ -51,6 +51,7 @@
       specialArgs = {inherit inputs;};
       modules = [
         ./hardware/personal-laptop.nix
+        nixos-hardware.nixosModules.lenovo-thinkpad-t440p
         ./configuration.nix
         inputs.home-manager.nixosModules.default
       ];

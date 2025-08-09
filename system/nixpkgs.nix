@@ -2,9 +2,8 @@
 {
   environment.systemPackages = with pkgs; [
 
-  /***** General Tools *****/
+    /***** Tools *****/
 
-    home-manager
     hyprland
     kitty
     htop
@@ -12,81 +11,150 @@
     libqalculate
     qalculate-qt
     python3
-    distrobox
-    podman
+    usbutils
 
-  /******************* Media *******************/
-  /* Tools for viewing or making media locally */
-  /*********************************************/
+      /*** Virtualization, Emulation ***/
 
-    #text
+      distrobox
+      podman
+      docker
+      waydroid
+
+      /* Game Emulators */
+
+        retroarch #Emulator frontend for libretro
+
+        melonDS #DS
+        azahar #3DS
+        dolphin-emu #Gamecube + Wii
+        cemu #Wii U
+        ryubing #Nintendo Switch
+        ppsspp #PSP
+        duckstation #PS1
+        pcsx2 #PS2
+        rpcs3 #PS3
+        shadps4 #PS4
+        xemu #Xbox
+        xenia-canary #Xbox 360
+        flycast #Sega Dreamcast
+
+        libretro.beetle-saturn #Sega Saturn
+        libretro.genesis-plus-gx #Sega Genesis, SG-1000
+        libretro.gambatte #Game Boy & Game Boy Color
+        libretro.mgba #Game Boy Advanced
+        libretro.mesen #NES
+        libretro.snes9x #SNES
+        libretro.mupen64plus #N64
+        libretro.beetle-vb #VirtualBoy
+        libretro.mame #Arcade Games
+
+  /***** System Management *****/
+
+    home-manager
+
+  /***** Media Playback *****/
+
+    /* Text */
+
+    /* Image */
+
+    /* Music */
+
+      projectm_3
+
+    /* Video */
+
+      vlc
+
+    /* Games */
+
+      lutris
+      prismlauncher
+
+  /***** Creating *****/
+
+    /* Text */
+
       neovim
       vim
-      libreoffice-qt-fresh
+      nano
       jetbrains.idea-community-bin
-        #intellij-addons
-        github-copilot-intellij-agent
-    #images
-      cheese
-      #creative
+        #[Addons]#
+          github-copilot-intellij-agent
+      libreoffice-qt-fresh
+
+    /* Images */
+
       gimp
       krita
-    #video
-      vlc
-      #creative
-        davinci-resolve # builds, takes to long, need pro for h264 i think anyway. figure out later.
-    #music
-      projectm_3
-      #creative
-        reaper
-    #games
-      lutris
-      retroarch
-      prismlauncher
-      waydroid
-      #creative
-        godot
-        worldpainter
-    #3D
-      #creative
-        blender
-        freecad
-        #cura #fails to build
-        mandelbulber
-    #general
-      #creative
+
+    /* Music */
+
+      reaper
+
+    /* Video */
+
+      #davinci-resolve # builds, takes to long, need pro for h264 i think anyway. figure out later.
+
+    /* 3D */
+
+      godot
+      worldpainter
+      blender
+      freecad
+      #cura #fails to build
+
+    /* Misc */
+
         qgis
+        mandelbulber
 
-  /****************** Internet ******************/
-  /* Tools for getting/sharing media externally */
-  /**********************************************/
+  /***** The Internet *****/
 
-    #text
-    #images
-    #video
-      yt-dlp
-    #music
+    /* Text */
+
+      discord
+
+    /* Image */
+
+      gallery-dl
+
+    /* Music */
+
+      nicotine-plus
       spotify
       ncspot
-      nicotine-plus
       spotdl
-    #games
+
+    /* Video */
+
+      yt-dlp
+
+    /* Games */
+
       steam
-    #general
+
+    /* General */
+
+      media-downloader
+      qbittorrent
       wget
       git
-      qbittorrent
-      i2p
-      #browsers
+
+      #[Browsers]#
+
         firefox
+        brave
+        ladybird
         mullvad-browser
-        ungoogled-chromium
+        tor-browser
+
+      #[Privacy Tools]#
+
         tor
-      #social
-        discord
-    #never go free willy
-      mullvad-vpn
-    #dont tell the feds
-      monero-gui
+        i2p
+        mullvad-vpn
+        monero-gui
+
   ];
 }
