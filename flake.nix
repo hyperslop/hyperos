@@ -4,6 +4,8 @@
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
+    nix-flatpak.url = "github:gmodena/nix-flatpak";
+
     hyprland = {
 	url = "github:hyprwm/Hyprland";
 	inputs.nixpkgs.follows = "nixpkgs";
@@ -26,7 +28,7 @@
 
   };
 
-  outputs = { self, nixpkgs, home-manager, nixos-hardware, ...}@inputs:
+  outputs = { self, nixpkgs, home-manager, nixos-hardware, nix-flatpak ...}@inputs:
   let
     system = "x86_64-linux";
     pkgs = nixpkgs.legacyPackages.${system};
@@ -44,6 +46,7 @@
       modules = [
         ./hardware/personal-desktop.nix
         ./configuration.nix
+        nix-flatpak.nixosModules.nix-flatpak
         inputs.home-manager.nixosModules.default
       ];
     };
@@ -53,6 +56,7 @@
         ./hardware/personal-laptop.nix
         nixos-hardware.nixosModules.lenovo-thinkpad-t440p
         ./configuration.nix
+        nix-flatpak.nixosModules.nix-flatpak
         inputs.home-manager.nixosModules.default
       ];
     };

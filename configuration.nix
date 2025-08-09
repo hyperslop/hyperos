@@ -77,6 +77,8 @@
 
   nix.settings.experimental-features = ["nix-command" "flakes"];
 
+  services.flatpak.enable = true;
+
   environment.sessionVariables.NIXOS_OZONE_WL = "1"; #Fix wayland issues for chromium/electron apps
 
   # User Inital Settings

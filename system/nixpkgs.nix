@@ -94,7 +94,7 @@
 
     /* Video */
 
-      #davinci-resolve # builds, takes to long, need pro for h264 i think anyway. figure out later.
+      #davinci-resolve # fails
 
     /* 3D */
 
@@ -102,7 +102,6 @@
       worldpainter
       blender
       freecad
-      #cura #fails to build
 
     /* Misc */
 
