@@ -159,13 +159,5 @@
         i2p
         mullvad-vpn
         monero-gui
-
-
-  ];
-
-  /* Flatpaks */
-
-  services.flatpak.packages = [
-    { appId = "org.vinegarhq.Sober"; origin = "flathub";  }
   ];
 }

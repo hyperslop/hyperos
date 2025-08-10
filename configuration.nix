@@ -6,6 +6,7 @@
   imports =
     [
       ./system/nixpkgs.nix
+      ./system/flatpak.nix
       inputs.home-manager.nixosModules.default #home.nix
     ];
 
