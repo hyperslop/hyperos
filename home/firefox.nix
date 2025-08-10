@@ -1,3 +1,5 @@
+#https://nix-community.github.io/home-manager/options.xhtml#opt-programs.firefox.profiles._name_.extensions
+
 { config, pkgs, inputs, ... }:
   let
     lock-false = {
@@ -65,6 +67,7 @@
           return-youtube-dislikes
           darkreader
         ];
+      settings."extensions.autoDisableScopes" = 0; #enable extensions automatically
       };
       school = {
         id = 1;
@@ -75,6 +78,7 @@
           return-youtube-dislikes
           darkreader
         ];
+      settings."extensions.autoDisableScopes" = 0; #enable extensions automatically
       };
       work = {
         id = 2;
@@ -85,6 +89,7 @@
           return-youtube-dislikes
           darkreader
         ];
+      settings."extensions.autoDisableScopes" = 0; #enable extensions automatically
       };
       misc = {
         id = 3;
@@ -95,6 +100,7 @@
           return-youtube-dislikes
           darkreader
         ];
+      settings."extensions.autoDisableScopes" = 0; #enable extensions automatically
       };
       anon = {
         id = 4;
@@ -105,6 +111,7 @@
           return-youtube-dislikes
           darkreader
         ];
+      settings."extensions.autoDisableScopes" = 0; #enable extensions automatically
       };
     };
   };
