@@ -4,7 +4,7 @@
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
-    nix-flatpak.url = "github:gmodena/nix-flatpak";
+    nix-flatpak.url = "github:gmodena/nix-flatpak/?ref=latest";
 
     hyprland = {
 	url = "github:hyprwm/Hyprland";
@@ -28,7 +28,7 @@
 
   };
 
-  outputs = { self, nixpkgs, home-manager, nixos-hardware, nix-flatpak ...}@inputs:
+  outputs = { self, nixpkgs, home-manager, nixos-hardware, nix-flatpak, ...}@inputs:
   let
     system = "x86_64-linux";
     pkgs = nixpkgs.legacyPackages.${system};
