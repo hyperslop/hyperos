@@ -70,6 +70,7 @@
 
       lutris
       prismlauncher
+      vinegar
 
   /***** Creating *****/
 
@@ -98,10 +99,14 @@
 
     /* 3D */
 
-      godot
-      worldpainter
       blender
       freecad
+
+    /* Games */
+
+      godot
+      worldpainter
+      rojo
 
     /* Misc */
 
@@ -155,5 +160,12 @@
         mullvad-vpn
         monero-gui
 
+
+  ];
+
+  /* Flatpaks */
+
+  services.flatpak.packages = [
+    { appId = "org.vinegarhq.Sober"; origin = "flathub";  }
   ];
 }
