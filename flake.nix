@@ -34,7 +34,7 @@
     pkgs = nixpkgs.legacyPackages.${system};
   in {
 
-    homeConfiguration."hyperslop" = home-manager.lib.homeManagerConfiguration { #sets stuff up for home manager
+    homeConfiguration."hyper" = home-manager.lib.homeManagerConfiguration { #sets stuff up for home manager
       inherit pkgs;
 
       extraSpecialArgs = { inherit inputs; };
@@ -44,8 +44,9 @@
     nixosConfigurations.desktop = nixpkgs.lib.nixosSystem { #setup for my desktop computer
       specialArgs = {inherit inputs;};
       modules = [
-        ./hardware/personal-desktop.nix
-        ./configuration.nix
+        ./hosts/hyper-desktop/hardware.nix
+        ./hosts/hyper-desktop/default.nix
+        ./default.nix
         nix-flatpak.nixosModules.nix-flatpak
         inputs.home-manager.nixosModules.default
       ];
@@ -53,9 +54,10 @@
     nixosConfigurations.laptop = nixpkgs.lib.nixosSystem { #setup for my laptop computer
       specialArgs = {inherit inputs;};
       modules = [
-        ./hardware/personal-laptop.nix
+        ./hosts/hyper-laptop/hardware.nix
+        ./hosts/hyper-laptop/default.nix
+        ./default.nix
         nixos-hardware.nixosModules.lenovo-thinkpad-t440p
-        ./configuration.nix
         nix-flatpak.nixosModules.nix-flatpak
         inputs.home-manager.nixosModules.default
       ];
