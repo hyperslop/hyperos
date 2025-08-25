@@ -34,11 +34,20 @@
     pkgs = nixpkgs.legacyPackages.${system};
   in {
 
-    homeConfiguration."hyper" = home-manager.lib.homeManagerConfiguration { #sets stuff up for home manager
+    homeConfiguration."hyper" = home-manager.lib.homeManagerConfiguration { #idk what this does
       inherit pkgs;
 
       extraSpecialArgs = { inherit inputs; };
 
+    };
+    nixosConfigurations.default = nixpkgs.lib.nixosSystem { #default machine
+      specialArgs = {inherit inputs;};
+      modules = [
+        ./hosts/default/hardware.nix
+        ./hosts/default/default.nix
+        ./default.nix
+        inputs.home-manager.nixosModules.default
+      ];
     };
 
     nixosConfigurations.desktop = nixpkgs.lib.nixosSystem { #setup for my desktop computer
