@@ -8,13 +8,7 @@
     packages = with pkgs; [
       kdePackages.kate
       kdePackages.kwalletmanager
-    #  thunderbird
     ];
   };
-
-#  programs.git = lib.mkIf (options.programs.git ? enable) {
-#    userName = "hyperslop";
-#    userEmail = "hyperslop@proton.me";
-#  };
 }
 
