@@ -5,6 +5,7 @@
     ./../../modules/home-manager/firefox.nix
     ./../../modules/home-manager/git.nix
     ./../../modules/home-manager/hyprland.nix
+    ./home-manager/firefox.nix
   ];
 
   home.username = "hyper";
@@ -26,6 +27,7 @@
     userName = "hyperslop";
     userEmail = "hyperslop@proton.me";
   };
+
 
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;

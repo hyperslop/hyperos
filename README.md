@@ -1,6 +1,7 @@
 # HyperOS: My NixOS Configuration
 This repository has everything necessary to completely recreate my system, saved in the form of spergalishishly declaritive instructions.
 
+
 ## Understanding the layout
 
 - modules: contains modules for configuration
@@ -20,6 +21,7 @@ This repository has everything necessary to completely recreate my system, saved
 - flake.nix: sets up a flake for each system, gets external flakes as inputs as needed.
 - dotfiles: contains any non declaritive raw text dotfiles
 
+
 ### How does this fit together?
 
 - flake.nix -> imports default.nix -> contains user and host agnostic settings
@@ -27,17 +29,19 @@ This repository has everything necessary to completely recreate my system, saved
         - -> imports basic system level modules
         - -> imports specific users -> imports basic user level modules
             - -> imports user specific addons, and tweaks
-                                                     
+            
 
 ## Features
 
-- coherant layout with maximum configurability 
-- basic user and host modules which can easily be added onto with host and user specific configuration
-- firefox policies, prefences, and profiles with extension, and extension settings declared
 - home-manager
-- setup every common emulator, older consoles using libretro 
+- flakes
+- coherant layout with maximum configurability 
+    - basic user and host modules which can easily be picked and chosen, and added onto with host and user specific configuration
 - all flatpaks declared in a specific .nix file
 - all nixpkgs declared in a specific .nix file
+- firefox policies, prefences, and profiles with extension, and extension settings declared
+- setup almost every console emulator, older consoles using libretro 
+
 
 ## To do
 
@@ -45,16 +49,12 @@ This repository has everything necessary to completely recreate my system, saved
 - setup davinci resolve
 - setup saving secrets that can be unencrypted at runtime
     - setup an ssh key that is declared for git automatically
-- setup user specific home manager stuff, import only certain home manager stuff on to certain machines
-    - have a user1.nix, user2.nix file, it will have all user specific configurations for that user.
-    - each bit of configuration will correspond to a module in home or system
-    - that configuration will be activated or deactivated based on if the machine has that corresponding module enabled
 - setup a declared directory structure in ~/extra for organizing all types of files and to sync with the cloud
     - setup a cloud server with the ability to upload and download files, it will have the same directory structure
     - something like 'cloud-sync (directory)' to upload new files and changed files
     - something like 'cloud-down (directory)' to download files from the cloud to the computer 
     - something like 'cloud-trash (directory)' to delete missing files on the cloud but not on the computer
-- modules used for a specific system customizable
+    
     
 ## Try HyperOS: It's so good!
 
