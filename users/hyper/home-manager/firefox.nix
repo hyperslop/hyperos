@@ -11,13 +11,11 @@ programs.firefox = lib.mkIf (options.programs.firefox ? enable) {
       isDefault = false;
       extensions.packages = with inputs.firefox-addons.packages."x86_64-linux"; [
           ublock-origin
-          LocalCDN
+          localcdn
           clearurls
-          youtube-recommended-videos
           return-youtube-dislikes
           sponsorblock
           dearrow
-          faststream
           darkreader
         ];
       settings."extensions.autoDisableScopes" = 0; #enable extensions automatically
@@ -27,13 +25,11 @@ programs.firefox = lib.mkIf (options.programs.firefox ? enable) {
         isDefault = false;
         extensions.packages = with inputs.firefox-addons.packages."x86_64-linux"; [
           ublock-origin
-          LocalCDN
+          localcdn
           clearurls
-          youtube-recommended-videos
           return-youtube-dislikes
           sponsorblock
           dearrow
-          faststream
           darkreader
         ];
       settings."extensions.autoDisableScopes" = 0; #enable extensions automatically
@@ -43,13 +39,11 @@ programs.firefox = lib.mkIf (options.programs.firefox ? enable) {
         isDefault = false;
         extensions.packages = with inputs.firefox-addons.packages."x86_64-linux"; [
           ublock-origin
-          LocalCDN
+          localcdn
           clearurls
-          youtube-recommended-videos
           return-youtube-dislikes
           sponsorblock
           dearrow
-          faststream
           darkreader
         ];
       settings."extensions.autoDisableScopes" = 0; #enable extensions automatically

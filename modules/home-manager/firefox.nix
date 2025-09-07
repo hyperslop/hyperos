@@ -22,23 +22,17 @@
         enable = true;
         version = "master";
       };
-      policies = {
-        };
-      Preferences = {
-        };
       profiles = {
       default = {
       id = 0;
       isDefault = true;
       extensions.packages = with inputs.firefox-addons.packages."x86_64-linux"; [
           ublock-origin
-          LocalCDN
+          localcdn
           clearurls
-          youtube-recommended-videos
           return-youtube-dislikes
           sponsorblock
           dearrow
-          faststream
           darkreader
         ];
       settings."extensions.autoDisableScopes" = 0; #enable extensions automatically
@@ -52,7 +46,7 @@
         isDefault = false;
         extensions.packages = with inputs.firefox-addons.packages."x86_64-linux"; [
           ublock-origin
-          LocalCDN
+          localcdn
           libredirect
           clearurls
           noscript
@@ -65,13 +59,11 @@
         isDefault = false;
         extensions.packages = with inputs.firefox-addons.packages."x86_64-linux"; [
           ublock-origin
-          LocalCDN
+          localcdn
           clearurls
-          youtube-recommended-videos
           return-youtube-dislikes
           sponsorblock
           dearrow
-          faststream
           darkreader
         ];
       settings."extensions.autoDisableScopes" = 0; #enable extensions automatically

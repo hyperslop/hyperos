@@ -29,7 +29,7 @@
 
   };
 
-  outputs = { self, nixpkgs, home-manager, nixos-hardware, nix-flatpak, arkenfox-nixos ...}@inputs:
+  outputs = { self, nixpkgs, home-manager, nixos-hardware, nix-flatpak, arkenfox-nixos, ...}@inputs:
   let
     system = "x86_64-linux";
     pkgs = nixpkgs.legacyPackages.${system};
