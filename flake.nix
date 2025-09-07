@@ -5,6 +5,7 @@
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
     nix-flatpak.url = "github:gmodena/nix-flatpak/?ref=latest";
+    arkenfox-nixos.url = "github:dwarfmaster/arkenfox-nixos";
 
     hyprland = {
 	url = "github:hyprwm/Hyprland";
@@ -28,7 +29,7 @@
 
   };
 
-  outputs = { self, nixpkgs, home-manager, nixos-hardware, nix-flatpak, ...}@inputs:
+  outputs = { self, nixpkgs, home-manager, nixos-hardware, nix-flatpak, arkenfox-nixos ...}@inputs:
   let
     system = "x86_64-linux";
     pkgs = nixpkgs.legacyPackages.${system};
@@ -47,6 +48,7 @@
         ./hosts/default/default.nix
         ./default.nix
         inputs.home-manager.nixosModules.default
+        arkenfox-nixos.hmModules.arkenfox
       ];
     };
 
@@ -58,6 +60,7 @@
         ./default.nix
         nix-flatpak.nixosModules.nix-flatpak
         inputs.home-manager.nixosModules.default
+        arkenfox-nixos.hmModules.arkenfox
       ];
     };
     nixosConfigurations.laptop = nixpkgs.lib.nixosSystem { #setup for my laptop computer
@@ -69,6 +72,7 @@
         nixos-hardware.nixosModules.lenovo-thinkpad-t440p
         nix-flatpak.nixosModules.nix-flatpak
         inputs.home-manager.nixosModules.default
+        arkenfox-nixos.hmModules.arkenfox
       ];
     };
   };

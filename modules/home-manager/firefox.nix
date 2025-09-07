@@ -1,6 +1,6 @@
 #https://nix-community.github.io/home-manager/options.xhtml#opt-programs.firefox.profiles._name_.extensions
 
-{ config, pkgs, inputs, ... }:
+{ config, pkgs, imports, inputs, ... }:
   let
     lock-false = {
       Value = false;
@@ -12,48 +12,70 @@
     };
   in
 {
+  imports = [
+    inputs.arkenfox-nixos.hmModules.arkenfox
+  ];
 
   programs.firefox = {
     enable = true;
+      arkenfox = {
+        enable = true;
+        version = "master";
+      };
       policies = {
-        DisableTelemetry = true;
-        DisableFirefoxStudies = true;
-        DisablePocket = true;
-        DisableFirefoxAccounts = true;
-        DisableAccounts = true;
-        DisableFirefoxScreenshots = true;
-        OverrideFirstRunPage = "";
-        OverridePostUpdatePage = "";
-        DontCheckDefaultBrowser = true;
-        DisplayBookmarksToolbar = "never"; # alternatives: "always" or "newtab"
-        DisplayMenuBar = "default-off"; # alternatives: "always", "never" or "default-on"
-        SearchBar = "unified"; # alternative: "separate"
-        EnableTrackingProtection = {
-          Value= true;
-          Locked = true;
-          Cryptomining = true;
-          Fingerprinting = true;
         };
-        Preferences = {
-          "browser.contentblocking.category" = { Value = "strict"; Status = "locked"; };
-          "extensions.pocket.enabled" = lock-false;
-          "extensions.screenshots.disabled" = lock-true;
-          "browser.topsites.contile.enabled" = lock-false;
-          "browser.formfill.enable" = lock-false;
-          "browser.search.suggest.enabled" = lock-false;
-          "browser.search.suggest.enabled.private" = lock-false;
-          "browser.urlbar.suggest.searches" = lock-false;
-          "browser.urlbar.showSearchSuggestionsFirst" = lock-false;
-          "browser.newtabpage.activity-stream.feeds.section.topstories" = lock-false;
-          "browser.newtabpage.activity-stream.feeds.snippets" = lock-false;
-          "browser.newtabpage.activity-stream.section.highlights.includePocket" = lock-false;
-          "browser.newtabpage.activity-stream.section.highlights.includeBookmarks" = lock-false;
-          "browser.newtabpage.activity-stream.section.highlights.includeDownloads" = lock-false;
-          "browser.newtabpage.activity-stream.section.highlights.includeVisited" = lock-false;
-          "browser.newtabpage.activity-stream.showSponsored" = lock-false;
-          "browser.newtabpage.activity-stream.system.showSponsored" = lock-false;
-          "browser.newtabpage.activity-stream.showSponsoredTopSites" = lock-false;
+      Preferences = {
         };
+      profiles = {
+      default = {
+      id = 0;
+      isDefault = true;
+      extensions.packages = with inputs.firefox-addons.packages."x86_64-linux"; [
+          ublock-origin
+          LocalCDN
+          clearurls
+          youtube-recommended-videos
+          return-youtube-dislikes
+          sponsorblock
+          dearrow
+          faststream
+          darkreader
+        ];
+      settings."extensions.autoDisableScopes" = 0; #enable extensions automatically
+        arkenfox = {
+          enable = true;
+          enableAllSections = true;
+        };
+      };
+      anon = {
+        id = 1000;
+        isDefault = false;
+        extensions.packages = with inputs.firefox-addons.packages."x86_64-linux"; [
+          ublock-origin
+          LocalCDN
+          libredirect
+          clearurls
+          noscript
+          darkreader
+        ];
+      settings."extensions.autoDisableScopes" = 0; #enable extensions automatically
+      };
+      misc = {
+        id = 2000;
+        isDefault = false;
+        extensions.packages = with inputs.firefox-addons.packages."x86_64-linux"; [
+          ublock-origin
+          LocalCDN
+          clearurls
+          youtube-recommended-videos
+          return-youtube-dislikes
+          sponsorblock
+          dearrow
+          faststream
+          darkreader
+        ];
+      settings."extensions.autoDisableScopes" = 0; #enable extensions automatically
+      };
       };
   };
 }
