@@ -21,7 +21,8 @@ programs.firefox = lib.mkIf (options.programs.firefox ? enable) {
           don-t-fuck-with-paste
           faststream
           i-dont-care-about-cookies
-          libredirect
+          umatrix
+          youtube-recommended-videos
 
         ];
       settings."extensions.autoDisableScopes" = 0; #enable extensions automatically
