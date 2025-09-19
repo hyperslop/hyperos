@@ -23,8 +23,16 @@
         version = "master";
       };
       profiles = {
-      default = {
+      ogfirefox = {
       id = 0;
+      isDefault = false;
+      extensions.packages = with inputs.firefox-addons.packages."x86_64-linux"; [
+          ublock-origin
+        ];
+      settings."extensions.autoDisableScopes" = 0; #enable extensions automatically
+      };
+      default = {
+      id = 1;
       isDefault = true;
       extensions.packages = with inputs.firefox-addons.packages."x86_64-linux"; [
           ublock-origin
@@ -32,7 +40,6 @@
           clearurls
           return-youtube-dislikes
           sponsorblock
-          dearrow
           darkreader
         ];
       settings."extensions.autoDisableScopes" = 0; #enable extensions automatically
@@ -42,7 +49,7 @@
         };
       };
       anon = {
-        id = 1;
+        id = 2;
         isDefault = false;
         extensions.packages = with inputs.firefox-addons.packages."x86_64-linux"; [
           ublock-origin
@@ -53,9 +60,13 @@
           darkreader
         ];
       settings."extensions.autoDisableScopes" = 0; #enable extensions automatically
+        arkenfox = {
+          enable = true;
+          enableAllSections = true;
+        };
       };
       misc = {
-        id = 2;
+        id = 3;
         isDefault = false;
         extensions.packages = with inputs.firefox-addons.packages."x86_64-linux"; [
           ublock-origin
@@ -63,10 +74,13 @@
           clearurls
           return-youtube-dislikes
           sponsorblock
-          dearrow
           darkreader
         ];
       settings."extensions.autoDisableScopes" = 0; #enable extensions automatically
+        arkenfox = {
+          enable = true;
+          enableAllSections = true;
+        };
       };
       };
   };

@@ -7,7 +7,7 @@
 programs.firefox = lib.mkIf (options.programs.firefox ? enable) {
    profiles = { # profiles: hyperslop, school, work, anon
       hyper = {
-      id = 3;
+      id = 4;
       isDefault = false;
       extensions.packages = with inputs.firefox-addons.packages."x86_64-linux"; [
           ublock-origin
@@ -15,26 +15,15 @@ programs.firefox = lib.mkIf (options.programs.firefox ? enable) {
           clearurls
           return-youtube-dislikes
           sponsorblock
-          dearrow
           darkreader
         ];
       settings."extensions.autoDisableScopes" = 0; #enable extensions automatically
+        arkenfox = {
+          enable = true;
+          enableAllSections = true;
+        };
       };
       school = {
-        id = 4;
-        isDefault = false;
-        extensions.packages = with inputs.firefox-addons.packages."x86_64-linux"; [
-          ublock-origin
-          localcdn
-          clearurls
-          return-youtube-dislikes
-          sponsorblock
-          dearrow
-          darkreader
-        ];
-      settings."extensions.autoDisableScopes" = 0; #enable extensions automatically
-      };
-      work = {
         id = 5;
         isDefault = false;
         extensions.packages = with inputs.firefox-addons.packages."x86_64-linux"; [
@@ -43,10 +32,30 @@ programs.firefox = lib.mkIf (options.programs.firefox ? enable) {
           clearurls
           return-youtube-dislikes
           sponsorblock
-          dearrow
           darkreader
         ];
       settings."extensions.autoDisableScopes" = 0; #enable extensions automatically
+        arkenfox = {
+          enable = true;
+          enableAllSections = true;
+        };
+      };
+      work = {
+        id = 6;
+        isDefault = false;
+        extensions.packages = with inputs.firefox-addons.packages."x86_64-linux"; [
+          ublock-origin
+          localcdn
+          clearurls
+          return-youtube-dislikes
+          sponsorblock
+          darkreader
+        ];
+      settings."extensions.autoDisableScopes" = 0; #enable extensions automatically
+        arkenfox = {
+          enable = true;
+          enableAllSections = true;
+        };
       };
       };
     };
