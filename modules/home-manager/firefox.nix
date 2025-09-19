@@ -42,7 +42,7 @@
         };
       };
       anon = {
-        id = 1000;
+        id = 1;
         isDefault = false;
         extensions.packages = with inputs.firefox-addons.packages."x86_64-linux"; [
           ublock-origin
@@ -55,7 +55,7 @@
       settings."extensions.autoDisableScopes" = 0; #enable extensions automatically
       };
       misc = {
-        id = 2000;
+        id = 2;
         isDefault = false;
         extensions.packages = with inputs.firefox-addons.packages."x86_64-linux"; [
           ublock-origin

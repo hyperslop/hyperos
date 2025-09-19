@@ -7,7 +7,7 @@
 programs.firefox = lib.mkIf (options.programs.firefox ? enable) {
    profiles = { # profiles: hyperslop, school, work, anon
       hyper = {
-      id = 100;
+      id = 3;
       isDefault = false;
       extensions.packages = with inputs.firefox-addons.packages."x86_64-linux"; [
           ublock-origin
@@ -21,7 +21,7 @@ programs.firefox = lib.mkIf (options.programs.firefox ? enable) {
       settings."extensions.autoDisableScopes" = 0; #enable extensions automatically
       };
       school = {
-        id = 101;
+        id = 4;
         isDefault = false;
         extensions.packages = with inputs.firefox-addons.packages."x86_64-linux"; [
           ublock-origin
@@ -35,7 +35,7 @@ programs.firefox = lib.mkIf (options.programs.firefox ? enable) {
       settings."extensions.autoDisableScopes" = 0; #enable extensions automatically
       };
       work = {
-        id = 102;
+        id = 5;
         isDefault = false;
         extensions.packages = with inputs.firefox-addons.packages."x86_64-linux"; [
           ublock-origin
