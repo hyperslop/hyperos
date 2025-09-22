@@ -158,6 +158,7 @@
         tor
         i2p
         mullvad-vpn
+        protonvpn-gui
         monero-gui
   ];
 }
