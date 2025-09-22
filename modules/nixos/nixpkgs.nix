@@ -30,7 +30,6 @@
         cemu #Wii U
         ryubing #Nintendo Switch
         ppsspp #PSP
-        duckstation #PS1
         pcsx2 #PS2
         rpcs3 #PS3
         shadps4 #PS4
@@ -38,6 +37,7 @@
         xenia-canary #Xbox 360
         flycast #Sega Dreamcast
 
+        libretro.swanstation #PS1
         libretro.beetle-saturn #Sega Saturn
         libretro.genesis-plus-gx #Sega Genesis, SG-1000
         libretro.gambatte #Game Boy & Game Boy Color
