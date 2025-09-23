@@ -12,11 +12,6 @@
 	inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    #hyprland-plugins = {
-    #  url = "github:hyprwm/hyprland-plugins";
-    #  inputs.hyprland.follows = "hyprland";
-    #};
-
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -28,8 +23,9 @@
     };
 
     plasma-manager = {
-      url = "github:nix-community/plasma-manager";
+      url = "github:pjones/plasma-manager";
       inputs.nixpkgs.follows = "nixpkgs";
+      inputs.home-manager.follows = "home-manager";
     };
 
   };
@@ -39,13 +35,6 @@
     system = "x86_64-linux";
     pkgs = nixpkgs.legacyPackages.${system};
   in {
-
-    homeConfiguration."hyper" = home-manager.lib.homeManagerConfiguration { #idk what this does
-      inherit pkgs;
-
-      extraSpecialArgs = { inherit inputs; };
-
-    };
     nixosConfigurations.default = nixpkgs.lib.nixosSystem { #default machine
       specialArgs = {inherit inputs;};
       modules = [
@@ -54,8 +43,6 @@
         ./default.nix
         nix-flatpak.nixosModules.nix-flatpak
         inputs.home-manager.nixosModules.default
-        arkenfox-nixos.hmModules.arkenfox
-        plasma-manager.homeModules.plasma-manager
       ];
     };
 
@@ -67,8 +54,6 @@
         ./default.nix
         nix-flatpak.nixosModules.nix-flatpak
         inputs.home-manager.nixosModules.default
-        arkenfox-nixos.hmModules.arkenfox
-        plasma-manager.homeManagerModules.plasma-manager
       ];
     };
     nixosConfigurations.laptop = nixpkgs.lib.nixosSystem { #setup for my laptop computer
@@ -80,8 +65,6 @@
         nixos-hardware.nixosModules.lenovo-thinkpad-t440p
         nix-flatpak.nixosModules.nix-flatpak
         inputs.home-manager.nixosModules.default
-        arkenfox-nixos.hmModules.arkenfox
-        plasma-manager.homeManagerModules.plasma-manager
       ];
     };
   };
