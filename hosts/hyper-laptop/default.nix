@@ -15,6 +15,8 @@
 
 
   home-manager = {
+    useGlobalPkgs = true;    # Use system's nixpkgs
+    useUserPackages = true;
     extraSpecialArgs = {inherit inputs; };
     users = {
       "hyper" = import ./../../users/hyper/home.nix;

@@ -27,9 +27,14 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    plasma-manager = {
+      url = "github:nix-community/plasma-manager";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
   };
 
-  outputs = { self, nixpkgs, home-manager, nixos-hardware, nix-flatpak, arkenfox-nixos, ...}@inputs:
+  outputs = { self, nixpkgs, home-manager, nixos-hardware, nix-flatpak, arkenfox-nixos, plasma-manager, ...}@inputs:
   let
     system = "x86_64-linux";
     pkgs = nixpkgs.legacyPackages.${system};
@@ -47,8 +52,10 @@
         ./hosts/default/hardware.nix
         ./hosts/default/default.nix
         ./default.nix
+        nix-flatpak.nixosModules.nix-flatpak
         inputs.home-manager.nixosModules.default
         arkenfox-nixos.hmModules.arkenfox
+        plasma-manager.homeModules.plasma-manager
       ];
     };
 
@@ -61,6 +68,7 @@
         nix-flatpak.nixosModules.nix-flatpak
         inputs.home-manager.nixosModules.default
         arkenfox-nixos.hmModules.arkenfox
+        plasma-manager.homeManagerModules.plasma-manager
       ];
     };
     nixosConfigurations.laptop = nixpkgs.lib.nixosSystem { #setup for my laptop computer
@@ -73,6 +81,7 @@
         nix-flatpak.nixosModules.nix-flatpak
         inputs.home-manager.nixosModules.default
         arkenfox-nixos.hmModules.arkenfox
+        plasma-manager.homeManagerModules.plasma-manager
       ];
     };
   };
