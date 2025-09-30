@@ -9,17 +9,9 @@
 
       ./../../modules/nixos/nixpkgs.nix
       ./../../modules/nixos/flatpak.nix
-      ./../../modules/nixos/virtualisation
 
       inputs.home-manager.nixosModules.default
     ];
-
-    modules.nixos.virtualisation = {
-      enable = true;
-      vms = {
-        nixos-dev = true;
-        windows11 = true;
-    };
 
   home-manager = {
     useGlobalPkgs = true;    # Use system's nixpkgs

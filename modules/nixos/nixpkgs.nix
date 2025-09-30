@@ -20,6 +20,16 @@
       docker
       waydroid
 
+        /*** QEMU/KVM ***/
+
+        virt-manager
+        virt-viewer
+        spice
+        spice-gtk
+        spice-protocol
+        libvirt
+        qemu
+
       /* Game Emulators */
 
         retroarch #Emulator frontend for libretro

@@ -9,7 +9,6 @@
 
       ./../../modules/nixos/nixpkgs.nix
       ./../../modules/nixos/flatpak.nix
-      ./../../modules/nixos/virtualisation.nix
 
       inputs.home-manager.nixosModules.default
     ];

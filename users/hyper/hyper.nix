@@ -4,7 +4,7 @@
   users.users.hyper = {
     isNormalUser = true;
     description = "hyper";
-    extraGroups = [ "networkmanager" "wheel" ];
+    extraGroups = [ "networkmanager" "wheel" "libvirtd"];
     packages = with pkgs; [
       kdePackages.kate
       kdePackages.kwalletmanager
