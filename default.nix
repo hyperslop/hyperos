@@ -11,6 +11,9 @@
 
   # Networking
 
+  hardware.bluetooth.enable = true;
+  hardware.bluetooth.powerOnBoot = true;
+
   # Initial Settings
 
   networking.networkmanager.enable = true;

@@ -12,6 +12,7 @@
     qalculate-qt
     python3
     usbutils
+    audio-sharing
 
       /*** Virtualization, Emulation ***/
 
@@ -29,6 +30,7 @@
         spice-protocol
         libvirt
         qemu
+        quickemu
 
       /* Game Emulators */
 
