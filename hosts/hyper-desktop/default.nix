@@ -6,20 +6,14 @@
   imports =
     [
       ./../../users/hyper/hyper.nix
-
-      ./../../modules/nixos/nixpkgs.nix
-      #./../../modules/nixos/flatpak.nix
+      ./../../modules/programs
 
       inputs.home-manager.nixosModules.default
 
-      ./../../modules/programs
     ];
 
-  #hyperos.programs.godot.enable = true;
-  hyperos.programs.htop.enable = true;
-  hyperos.programs.fastfetch.enable = true;
-  hyperos.programs.sober.enable = true;
-  hyperos.programs.docker.enable = true;
+  hyperos.programs.all.enable = true;
+
 
   home-manager = {
     useGlobalPkgs = true;    # Use system's nixpkgs

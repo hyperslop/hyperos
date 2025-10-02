@@ -19,7 +19,7 @@ programName: {
 
     # Home manager module - only if hasHomeManager is true
     (lib.mkIf hasHomeManager {
-      home-manager.sharedModules = [ (../home-manager + "/${programName}.nix") ];
+      home-manager.sharedModules = [ (../modules/home-manager + "/${programName}.nix") ];
     })
 
     # Extra custom config

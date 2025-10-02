@@ -6,12 +6,12 @@
   imports =
     [
       ./../../users/hyper/hyper.nix
-
-      ./../../modules/nixos/nixpkgs.nix
-      ./../../modules/nixos/flatpak.nix
+      ./../../modules/programs
 
       inputs.home-manager.nixosModules.default
     ];
+
+  hyperos.programs.all.enable = true;
 
   home-manager = {
     useGlobalPkgs = true;    # Use system's nixpkgs
