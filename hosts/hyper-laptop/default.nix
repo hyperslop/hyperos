@@ -5,7 +5,7 @@
 {
   imports =
     [
-      ./../../users/hyper/hyper.nix
+      ./../../homes/hyper/hyper.nix
       ./../../modules/programs
 
       inputs.home-manager.nixosModules.default
@@ -18,7 +18,7 @@
     useUserPackages = true;
     extraSpecialArgs = {inherit inputs; };
     users = {
-      "hyper" = import ./../../users/hyper/home.nix;
+      "hyper" = import ./../../homes/hyper/home.nix;
     };
     #Don't know what this does but it makes home manager work, fixes error message.
     backupFileExtension = "backup";
