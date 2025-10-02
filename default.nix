@@ -95,10 +95,10 @@
   services.resolved.enable = true;
 
   #podman settings
-  virtualisation.podman = {
-    enable = true;
-    dockerCompat = true;
-  };
+  #virtualisation.podman = {
+  #  enable = true;
+  #  dockerCompat = true;
+  #};
 
   #Virtualisation settings
   virtualisation.libvirtd.enable = true;

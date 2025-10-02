@@ -1,6 +1,6 @@
-{ config, ...}:
-{
-  services.flatpak.packages = [
-    { appId = "org.vinegarhq.Sober"; origin = "flathub";  }
-  ];
-}
+#{ config, ...}:
+#{
+#  services.flatpak.packages = [
+#    { appId = "org.vinegarhq.Sober"; origin = "flathub";  }
+#  ];
+#}

@@ -6,8 +6,8 @@
 
     hyprland
     kitty
-    htop
-    fastfetch
+    #htop
+    #fastfetch
     libqalculate
     qalculate-qt
     python3
@@ -18,7 +18,7 @@
 
       distrobox
       podman
-      docker
+      #docker
       waydroid
 
         /*** QEMU/KVM ***/
