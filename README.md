@@ -1,67 +1,106 @@
 # HyperOS: My NixOS Configuration
-This repository has everything necessary to completely recreate my system, saved in the form of spergalishishly declaritive instructions.
+### Everything necessary to completely recreate my systems, and easily make new systems.
 
+## Understanding the layout simply:
 
-## Understanding the layout
+- `dotfiles/` non home-manager user level files
+- `flake.nix` my system flake
+- `homes/` folder to define specific users
+- `hosts/` folder to define specific machines
+- `lib/` folder to put commonly used functions
+- `modules/` modules of software + nix code set to options
+- `pkgs/` custom made packages
+- `secrets/` encrypted secrets
 
-- modules: contains modules for configuration
-    - modules/hardware: contains commonly used hardware modules
-    - modules/home-manager: contains base user level configuration modules
-    - modules/nixos: contains system level configuration modules
-- meta: contains meta modules made up of common combinations of home-manager and nixos modules
-- hosts: contains configuration for specific hosts, which modules are used on that host
-    - hosts/default: the default template host
-        - default.nix: host specific settings with system level modules
-        - hardware.nix: host specific hardware settings
-- users: contains addon configurations for specific modules for specific users
-    - users/default: default template user
-        - default.nix: non home-manager user specific options, addons, and tweaks
-        - home.nix: user specific addons and tweaks for my home-manager modules
-- default.nix: the basic configuration with system and use agnostic settings
-- flake.nix: sets up a flake for each system, gets external flakes as inputs as needed.
-- dotfiles: contains any non declaritive raw text dotfiles
+## Features:
 
-
-### How does this fit together?
-
-- flake.nix -> imports default.nix -> contains user and host agnostic settings
-    - imports a specific hosts files -> contains host specific and user agnostic settings
-        - -> imports basic system level modules
-        - -> imports specific users -> imports basic user level modules
-            - -> imports user specific addons, and tweaks
-            
-
-## Features
-
-- home-manager
-- flakes
-- coherant layout with maximum configurability 
-    - basic user and host modules which can easily be picked and chosen, and added onto with host and user specific configuration
-- all flatpaks declared in a specific .nix file
-- all nixpkgs declared in a specific .nix file
-- firefox policies, prefences, and profiles with extension, and extension settings declared
-- setup almost every console emulator, older consoles using libretro 
-
+- I'll list them later when I remember
 
 ## To do
 
-- declare ublock origin specific tracker lists
-- setup davinci resolve
-- setup saving secrets that can be unencrypted at runtime
-    - setup an ssh key that is declared for git automatically
-- setup a declared directory structure in ~/extra for organizing all types of files and to sync with the cloud
-    - setup a cloud server with the ability to upload and download files, it will have the same directory structure
-    - something like 'cloud-sync (directory)' to upload new files and changed files
-    - something like 'cloud-down (directory)' to download files from the cloud to the computer 
-    - something like 'cloud-trash (directory)' to delete missing files on the cloud but not on the computer
-    
+- move everything in hyperos/default.nix into modules/
+- setup profiles
+- setup secrets
+- setup zfs or btrfs immutibility
+- setup nixos server
+- fix default machine and user to work with new modules
     
 ## Try HyperOS: It's so good!
 
 1. "find" a computer with nixos installed
-2. clone this repository in any spot. I just put it in my home directory.
+2. clone this repository to any spot
 3. move hardware.nix to hosts/(hostname). To generate use nixos-generate-config
 4. Copy the hosts/default/default.nix file to your host, edit it as you choose
-5. Copy the user/default/default.nix and home.nix into user/(youruser)/, edit it as you choose
-6. In flake.nix, copy the default flake code. Replace the imports with your hosts imports
-7. run 'sudo nixos-rebuild switch --flake .#yourcomputer'
+    - make it easy options like `hyperos.profiles.desktop.enabled = true` or `hyperos.programs.steam.enabled = true`
+5. Copy the homes/default/default.nix and home.nix into gomes/(youruser)/, edit it as you choose
+    - add stuff here if you want them to only be installed if your user is added to a machine
+6. In flake.nix, copy the default flake code. Rename and import your hosts/host/default.nix
+7. run `sudo nixos-rebuild switch --flake .#hostname`
+
+## Understanding the layout fully
+```
+dotfiles/ 
+    program.txt
+    program2.txt
+```
+```
+flake.nix
+```
+```
+homes/
+    user1/
+        default.nix
+        home.nix
+    user2/
+        home-manager/ #home-manager configurations just for this user
+            program1.nix
+            program2.nix 
+        default.nix #defines the user
+        home.nix #defines the user home-manager configuration
+```
+```
+hosts/
+    machine1/
+        default.nix
+        hardware.nix
+    machine2
+        default.nix # defines system specific configuration
+        hardware.nix # defines hardware specifics for that system
+```
+```
+lib/
+    default.nix #imports all lib for easy use
+    mkSomething.nix
+    mkSomething2.nix
+```
+```
+modules/ #set options inside of hosts/machine/ or homes/user/
+    hardware/
+        cpu.nix
+        gpu.nix #hyperos.hardware.gpu.nvidia.enabled = true;
+    home-manager/
+        program1.nix 
+        program2.nix #hyperos.programs.program2.enabled = true;
+    profiles/
+        base.nix
+        desktop.nix
+        gaming.nix
+    programs/
+        _all.nix #single source of truth for possible software on hyperos systems
+        default.nix #option creation logic
+        program1.nix
+        program2.nix #hyperos.programs.program2.enabled = true;
+    system/
+        boot.nix
+        audio.nix
+        
+    README.md #more information on modules
+```
+```
+pkgs/
+    program3.nix #not in nixpkgs, flatpak, etc
+```
+```
+secrets/
+    samsara-control-matrix-passw.txt #ENCRYPTED ❌ CRANK WEINER HARDER FEDS 💯🤡 ALL MINE 😂
+```
