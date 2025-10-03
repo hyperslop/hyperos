@@ -8,40 +8,38 @@
 # 4. Creates option hyperos.programs.all. This only enables every SOFTWARE with hyperos opinionated configs. not hardware, or system configs
 #      See /modules/profiles for more granulare meta-modules ( system, development, desktop, gaming, virtualisation )
 
-{ lib, pkgs, config, ... }:
+{ lib, config, ... }:
 let
   mk = import ../../lib/mkProgramModule.nix;
   registry = import ./_all.nix;
 
-  # Auto-detect everything for a program
-  analyzeProgram = name: {
-    inherit name;
-    hasPackage = builtins.hasAttr name pkgs;
-    hasHomeManager = builtins.pathExists (../home-manager + "/${name}.nix");
-    hasExtraConfig = builtins.pathExists (./. + "/${name}.nix");
-  };
+  # Just check if files exist - no pkgs, no config
+  hasHomeManagerFile = name: builtins.pathExists (../home-manager + "/${name}.nix");
+  hasExtraConfigFile = name: builtins.pathExists (./. + "/${name}.nix");
 
-  # Analyze all programs
-  programs = map analyzeProgram registry.all;
+  # Simple module generation
+  modules = map (name: mk name {
+    packageName = name;  # Just pass the name
+    hasHomeManager = hasHomeManagerFile name;
+  }) registry.all;
 
-  # Generate modules
-  modules = map (p: mk p.name {
-    packageName = if p.hasPackage then p.name else null;
-    hasHomeManager = p.hasHomeManager;
-  }) programs;
-
-  # Import extra configs
-  extras = builtins.filter (x: x != null)
-    (map (p: if p.hasExtraConfig then ./. + "/${p.name}.nix" else null) programs);
+  # Import extra config files
+  extras = builtins.filter
+    (path: path != null)
+    (map (name:
+      if hasExtraConfigFile name
+      then ./. + "/${name}.nix"
+      else null
+    ) registry.all);
 in
 {
   options.hyperos.programs.all.enable = lib.mkEnableOption "all programs";
 
   config = lib.mkIf config.hyperos.programs.all.enable {
-    # Use mkDefault so individual programs can override
     hyperos.programs = lib.genAttrs registry.all (name: {
       enable = lib.mkDefault true;
     });
   };
+
   imports = modules ++ extras;
 }
