@@ -16,6 +16,7 @@
     "python3"
     "usbutils"
     "audio-sharing"
+    "sober"
 
       /*** Virtualization, Emulation ***/
 
