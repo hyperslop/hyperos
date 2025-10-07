@@ -18,6 +18,7 @@
     "audio-sharing"
     "sober"
     "nettools"
+    "inetutils"
 
       /*** Virtualization, Emulation ***/
 
