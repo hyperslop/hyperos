@@ -25,6 +25,7 @@
   };
 
   networking.hostName = "laptop"; # Define your hostname.
+    networking.firewall.allowedTCPPorts = [ 8554 ];
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
 }
