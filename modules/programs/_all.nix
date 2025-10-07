@@ -17,6 +17,7 @@
     "usbutils"
     "audio-sharing"
     "sober"
+    "nettools"
 
       /*** Virtualization, Emulation ***/
 
