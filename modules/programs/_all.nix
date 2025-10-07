@@ -16,6 +16,7 @@
     "python3"
     "usbutils"
     "audio-sharing"
+    "sonobus"
     "sober"
     "nettools"
     "inetutils"
