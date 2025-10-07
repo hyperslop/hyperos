@@ -14,7 +14,6 @@
 
   hyperos.programs.all.enable = true;
 
-
   home-manager = {
     useGlobalPkgs = true;    # Use system's nixpkgs
     useUserPackages = true;
