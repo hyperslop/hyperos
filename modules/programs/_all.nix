@@ -18,6 +18,8 @@
     "audio-sharing"
     "sonobus-flatpak"
     "sober"
+    "kde"
+    "sddm-custom"
     "nettools"
     "inetutils"
 
@@ -45,13 +47,13 @@
 
         "melonDS" #DS
         "azahar" #3DS
-        "dolphin-emu" #Gamecube + Wii
-        "cemu" #Wii U
+        #"dolphin-emu" #Gamecube + Wii CMAKE < V3.5
+        #"cemu" #Wii U CMAKE < V3.5
         "ryubing" #Nintendo Switch
         "ppsspp" #PSP
         "pcsx2" #PS2
         "rpcs3" #PS3
-        "shadps4" #PS4
+        #"shadps4" #PS4 CMAKE < V3.5
         "xemu" #Xbox
         "xenia-canary" #Xbox 360
         "flycast" #Sega Dreamcast
@@ -87,7 +89,7 @@
 
     /* Games */
 
-      "lutris"
+      #"lutris"
       "prismlauncher"
       "vinegar"
 
@@ -98,9 +100,9 @@
       "neovim"
       "vim"
       "nano"
-      "jetbrains.idea-community-bin"
+      #"jetbrains.idea-community-bin"
         #[Addons]#
-          "github-copilot-intellij-agent"
+      #    "github-copilot-intellij-agent"
       "libreoffice-qt-fresh"
 
     /* Images */
@@ -176,7 +178,7 @@
 
         "tor"
         "i2p"
-        "mullvad-vpn"
+        "mullvad"
         "protonvpn-gui"
         "monero-gui"
   ];
