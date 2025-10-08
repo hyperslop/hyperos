@@ -6,8 +6,12 @@
       if pkgs-stable != null
       then pkgs-stable.intel-graphics-compiler
       else prev.intel-graphics-compiler;
-  })
 
+    intel-compute-runtime =
+      if pkgs-stable != null
+      then pkgs-stable.intel-compute-runtime
+      else prev.intel-compute-runtime;
+    })
   # Add more overlays here as needed
   # (final: prev: {
   #   someOtherPackage = pkgs-stable.someOtherPackage;
