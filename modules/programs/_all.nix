@@ -18,10 +18,11 @@
     "audio-sharing"
     "sonobus-flatpak"
     "sober"
-    "kde"
+    "kde-plasma"
     "sddm-custom"
     "nettools"
     "inetutils"
+    "bash"
 
       /*** Virtualization, Emulation ***/
 
@@ -188,5 +189,10 @@
     dolphin-emu = "stable";
     cemu = "stable";
     shadps4 = "stable";
+
+    sddm-custom = "null";
+    sonobus-flatpak = "null";
+    sober = "null";
+    kde-plasma = "null";
   };
 }
