@@ -47,13 +47,13 @@
 
         "melonDS" #DS
         "azahar" #3DS
-        #"dolphin-emu" #Gamecube + Wii CMAKE < V3.5
-        #"cemu" #Wii U CMAKE < V3.5
+        "dolphin-emu" #Gamecube + Wii CMAKE < V3.5
+        "cemu" #Wii U CMAKE < V3.5
         "ryubing" #Nintendo Switch
         "ppsspp" #PSP
         "pcsx2" #PS2
         "rpcs3" #PS3
-        #"shadps4" #PS4 CMAKE < V3.5
+        "shadps4" #PS4 CMAKE < V3.5
         "xemu" #Xbox
         "xenia-canary" #Xbox 360
         "flycast" #Sega Dreamcast
@@ -182,4 +182,11 @@
         "protonvpn-gui"
         "monero-gui"
   ];
+
+  packageSources = {
+    lutris = "stable";
+    dolphin-emu = "stable";
+    cemu = "stable";
+    shadps4 = "stable";
+  };
 }

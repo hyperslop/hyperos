@@ -6,22 +6,31 @@
 programName: {
   hasHomeManager ? false,
   extraConfig ? {},
-  packageName ? programName
-}: { config, lib, pkgs, ... }:
+  packageName ? programName,
+  packageSource ? "default"
+}: { config, lib, pkgs, ... }@args:  # Capture all args here
 let
   cfg = config.hyperos.programs.${programName};
 
-  # Handle nested packages like "jetbrains.idea-community-bin"
-  getPackageIfExists = name:
-    if name == null then null
-    else lib.attrByPath (lib.splitString "." name) null pkgs;
+  # Select the appropriate package set based on packageSource
+  pkgSet =
+    if packageSource == null then null
+    else if packageSource == "default" then pkgs
+    else
+      # Look directly in the function arguments, not config._module.args
+      let customPkgs = args.${"pkgs-" + packageSource} or null;
+      in if customPkgs != null then customPkgs else pkgs;
 
-  package = getPackageIfExists packageName;
+  # Handle nested packages like "jetbrains.idea-community-bin"
+  getPackageIfExists = name: pkgSet:
+    if name == null || pkgSet == null then null
+    else lib.attrByPath (lib.splitString "." name) null pkgSet;
+
+  package = getPackageIfExists packageName pkgSet;
 in
 {
   options.hyperos.programs.${programName} = {
     enable = lib.mkEnableOption programName;
-
     enableHomeManager = lib.mkOption {
       type = lib.types.bool;
       default = hasHomeManager;
@@ -30,13 +39,15 @@ in
   };
 
   config = lib.mkIf cfg.enable (lib.mkMerge [
-    (lib.mkIf (package != null) {
+    # Only install package if packageSource is not null and package exists
+    (lib.mkIf (packageSource != null && package != null) {
       environment.systemPackages = [ package ];
     })
 
-    (lib.mkIf (packageName != null && package == null) {
+    # Warning if package not found (but only if we're trying to install it)
+    (lib.mkIf (packageSource != null && packageName != null && package == null) {
       warnings = [
-        "Package '${packageName}' not found for program '${programName}'"
+        "Package '${packageName}' not found in ${packageSource} package set for program '${programName}'"
       ];
     })
 

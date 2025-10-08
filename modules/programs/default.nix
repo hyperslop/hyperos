@@ -13,17 +13,18 @@ let
   mk = import ../../lib/mkProgramModule.nix;
   registry = import ./_all.nix;
 
-  # Just check if files exist - no pkgs, no config
   hasHomeManagerFile = name: builtins.pathExists (../home-manager + "/${name}.nix");
   hasExtraConfigFile = name: builtins.pathExists (./. + "/${name}.nix");
 
-  # Simple module generation
+  # Get package source from registry, default to "default"
+  getPackageSource = name: registry.packageSources.${name} or "default";
+
   modules = map (name: mk name {
-    packageName = name;  # Just pass the name
+    packageName = name;
     hasHomeManager = hasHomeManagerFile name;
+    packageSource = getPackageSource name;
   }) registry.all;
 
-  # Import extra config files
   extras = builtins.filter
     (path: path != null)
     (map (name:
@@ -34,12 +35,10 @@ let
 in
 {
   options.hyperos.programs.all.enable = lib.mkEnableOption "all programs";
-
   config = lib.mkIf config.hyperos.programs.all.enable {
     hyperos.programs = lib.genAttrs registry.all (name: {
       enable = lib.mkDefault true;
     });
   };
-
   imports = modules ++ extras;
 }

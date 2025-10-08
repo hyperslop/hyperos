@@ -3,6 +3,7 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-25.05";
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
     nix-flatpak.url = "github:gmodena/nix-flatpak/?ref=latest";
     arkenfox-nixos.url = "github:dwarfmaster/arkenfox-nixos";
@@ -30,13 +31,30 @@
 
   };
 
-  outputs = { self, nixpkgs, home-manager, nixos-hardware, nix-flatpak, arkenfox-nixos, plasma-manager, ...}@inputs:
+  outputs = {
+  self,
+  nixpkgs,
+  nixpkgs-stable,
+  home-manager,
+  nixos-hardware,
+  nix-flatpak,
+  arkenfox-nixos,
+  plasma-manager,
+  ...
+  }@inputs:
   let
     system = "x86_64-linux";
     pkgs = nixpkgs.legacyPackages.${system};
+    pkgs-stable = import nixpkgs-stable {
+      inherit system;
+      config.allowUnfree = true;
+    };
   in {
     nixosConfigurations.default = nixpkgs.lib.nixosSystem { #default machine
-      specialArgs = {inherit inputs;};
+      specialArgs = {
+        inherit inputs;
+        inherit pkgs-stable;
+      };
       modules = [
         ./hosts/default/hardware.nix
         ./hosts/default/default.nix
@@ -47,7 +65,10 @@
     };
 
     nixosConfigurations.desktop = nixpkgs.lib.nixosSystem { #setup for my desktop computer
-      specialArgs = {inherit inputs;};
+      specialArgs = {
+        inherit inputs;
+        inherit pkgs-stable;
+      };
       modules = [
         ./hosts/hyper-desktop/hardware.nix
         ./hosts/hyper-desktop/default.nix
@@ -57,7 +78,10 @@
       ];
     };
     nixosConfigurations.laptop = nixpkgs.lib.nixosSystem { #setup for my laptop computer
-      specialArgs = {inherit inputs;};
+      specialArgs = {
+        inherit inputs;
+        inherit pkgs-stable;
+      };
       modules = [
         ./hosts/hyper-laptop/hardware.nix
         ./hosts/hyper-laptop/default.nix
