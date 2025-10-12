@@ -23,6 +23,11 @@
     "nettools"
     "inetutils"
     "bash"
+    "ffmpeg-full"
+    "darktable"
+    "digikam"
+    "opensnitch"
+    "opensnitch-ui"
 
       /*** Virtualization, Emulation ***/
 
@@ -87,6 +92,7 @@
     /* Video */
 
       "vlc"
+      "mpv"
 
     /* Games */
 
@@ -189,6 +195,7 @@
     dolphin-emu = "stable";
     cemu = "stable";
     shadps4 = "stable";
+    digikam = "stable";
 
     sddm-custom = "null";
     sonobus-flatpak = "null";

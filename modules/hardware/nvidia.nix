@@ -14,7 +14,7 @@
 
     powerManagement.finegrained = false;
 
-    open = true; #use nvidia open source kernal module
+    open = false; #use nvidia open source kernal module
 
    nvidiaSettings = true; #enable nvidia nvidiaSettings
 
