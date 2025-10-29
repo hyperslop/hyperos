@@ -5,31 +5,135 @@
 /* THE SINGLE SOURCE OF TRUTH FOR PROGRAMS ON HYPEROS */
 
   all = [
-    /***** Tools *****/
+    /**** BASE ****/
 
-    "hyprland"
-    "kitty"
+    "home-manager" #required (probably ¯\_(ツ)_/¯ )
+    "git"
+    "bash"
     "htop"
     "fastfetch"
+    "wget"
+    "neovim"
+    "nano"
     "libqalculate"
-    "qalculate-qt"
-    "python3"
     "usbutils"
-    "audio-sharing"
-    "sonobus-flatpak"
-    "sober"
-    "kde-plasma"
-    "sddm-custom"
     "nettools"
     "inetutils"
-    "bash"
-    "ffmpeg-full"
-    "darktable"
-    "digikam"
-    "opensnitch"
-    "opensnitch-ui"
+    "exiftool"
+    "dmidecode"
+    "lm_sensors"
+    "python3"
 
-      /*** Virtualization, Emulation ***/
+    /**** DESKTOP ****/
+
+    "hyprland"
+    "kde-plasma"
+    "sddm-custom"
+
+    /**** BASIC-APPS ****/
+
+      /* CALCULATOR */
+        "qalculate-qt"
+      /* DOCUMENT EDITOR */
+        "libreoffice-qt-fresh"
+      /* IMAGE VIEWER */
+        "qimgv"
+        "feh"
+      /* VIDEO VIEWER */
+        "vlc"
+        "mpv"
+
+    /**** ONLINE-COMMUNICATION ****/
+
+      /* BROWSER */
+        "firefox"
+        "brave"
+      /* GENERAL */
+        "discord"
+
+    /**** ONLINE-MEDIA ****/
+      /* VIDEO */
+        "yt-dlp"
+      /* IMAGE */
+        "gallery-dl"
+      /* MUSIC */
+        "nicotine-plus"
+        "spotify"
+        "ncspot"
+        "spotdl"
+        "sonobus-flatpak"
+      /* GENERAL */
+        "qbittorrent"
+
+    /**** CREATIVE-APPS ***/
+
+      /* PHOTOGRAPHY */
+        "darktable"
+        "digikam"
+
+        "xnviewmp-flatpak" #remove later?
+        "geeqie" #remove later?
+      /* IMAGES */
+        "gimp"
+        "krita"
+        "imagemagick"
+      /* MUSIC */
+        "reaper"
+      /* VIDEO */
+        "davinci-resolve"
+        "ffmpeg-full"
+      /* 3D */
+        "blender"
+        "freecad"
+      /* GAMES */
+        "godot"
+        "worldpainter"
+        "vinegar"
+      /* LOCAL-AI */
+        "lmstudio"
+      /* MAPS */
+        "qgis"
+
+    /**** FUN APPLICATIONS ****/
+
+      "mandelbulber"
+      "projectm_3"
+      "ladybird"
+
+    /**** GAMING ****/
+
+      "steam"
+      "lutris"
+      "prismlauncher"
+      "sober"
+
+      /* GAME EMULATION */
+        "retroarch" #Emulator frontend for libretro
+
+        "melonDS" #DS
+        "azahar" #3DS
+        "dolphin-emu" #Gamecube + Wii
+        "cemu" #Wii U
+        "ryubing" #Nintendo Switch
+        "ppsspp" #PSP
+        "pcsx2" #PS2
+        "rpcs3" #PS3
+        "shadps4" #PS4
+        "xemu" #Xbox
+        "xenia-canary" #Xbox 360
+        "flycast" #Sega Dreamcast
+
+        "libretro.gambatte" #Game Boy & Game Boy Color
+        "libretro.mgba" #Game Boy Advanced
+        "libretro.mesen" #NES
+        "libretro.snes9x" #SNES
+        "libretro.mupen64plus" #N64
+        "libretro.swanstation" #PS1
+        "libretro.beetle-saturn" #Sega Saturn
+        "libretro.genesis-plus-gx" #Sega Genesis, SG-1000
+        "libretro.mame" #Arcade Games
+
+    /**** VIRTUALIZATION ****/
 
       "distrobox"
       "podman"
@@ -47,158 +151,31 @@
         "qemu"
         "quickemu"
 
-      /* Game Emulators */
-
-        "retroarch" #Emulator frontend for libretro
-
-        "melonDS" #DS
-        "azahar" #3DS
-        "dolphin-emu" #Gamecube + Wii CMAKE < V3.5
-        "cemu" #Wii U CMAKE < V3.5
-        "ryubing" #Nintendo Switch
-        "ppsspp" #PSP
-        "pcsx2" #PS2
-        "rpcs3" #PS3
-        "shadps4" #PS4 CMAKE < V3.5
-        "xemu" #Xbox
-        "xenia-canary" #Xbox 360
-        "flycast" #Sega Dreamcast
-
-        "libretro.swanstation" #PS1
-        "libretro.beetle-saturn" #Sega Saturn
-        "libretro.genesis-plus-gx" #Sega Genesis, SG-1000
-        "libretro.gambatte" #Game Boy & Game Boy Color
-        "libretro.mgba" #Game Boy Advanced
-        "libretro.mesen" #NES
-        "libretro.snes9x" #SNES
-        "libretro.mupen64plus" #N64
-        "libretro.beetle-vb" #VirtualBoy
-        "libretro.mame" #Arcade Games
-
-  /***** System Management *****/
-
-    "home-manager"
-
-  /***** Media Playback *****/
-
-    /* Text */
-
-    /* Image */
-
-    /* Music */
-
-      "projectm_3"
-
-    /* Video */
-
-      "vlc"
-      "mpv"
-
-    /* Games */
-
-      #"lutris"
-      "prismlauncher"
-      "vinegar"
-
-  /***** Creating *****/
-
-    /* Text */
-
-      "neovim"
-      "vim"
-      "nano"
-      #"jetbrains.idea-community-bin"
-        #[Addons]#
-      #    "github-copilot-intellij-agent"
-      "libreoffice-qt-fresh"
-
-    /* Images */
-
-      "gimp"
-      "krita"
-
-    /* Music */
-
-      "reaper"
-
-    /* Video */
-
-      #davinci-resolve # fails
-
-    /* 3D */
-
-      "blender"
-      "freecad"
-
-    /* Games */
-
-      "godot"
-      "worldpainter"
-      "rojo"
-
-    /* Misc */
-
-        "qgis"
-        "mandelbulber"
-
-  /***** The Internet *****/
-
-    /* Text */
-
-      "discord"
-
-    /* Image */
-
-      "gallery-dl"
-
-    /* Music */
-
-      "nicotine-plus"
-      "spotify"
-      "ncspot"
-      "spotdl"
-
-    /* Video */
-
-      "yt-dlp"
-
-    /* Games */
-
-      "steam"
-
-    /* General */
-
-      "media-downloader"
-      "qbittorrent"
-      "wget"
-      "git"
-
-      #[Browsers]#
-
-        "firefox"
-        "brave"
-        "ladybird"
-        "mullvad-browser"
-        "tor-browser"
-
-      #[Privacy Tools]#
+    /**** PRIVACY ****/
 
         "tor"
         "i2p"
         "mullvad"
         "protonvpn-gui"
         "monero-gui"
+        "mullvad-browser"
+        "tor-browser"
+        "wireguard-tools"
+        "opensnitch"
+        "opensnitch-ui"
+
   ];
 
   packageSources = {
-    lutris = "stable";
-    dolphin-emu = "stable";
-    cemu = "stable";
-    shadps4 = "stable";
-    digikam = "stable";
+    davinci-resolve = "stable";
+    azahar = "stable"; #compiles 10/28/25
+    rpcs3 = "stable"; #compiles 10/28/25
+    ollama = "stable"; #compiles 10/28/25
+    ollama-cuda = "stable"; #compiles 10/28/25
 
     sddm-custom = "null";
     sonobus-flatpak = "null";
+    xnviewmp-flatpak = "null";
     sober = "null";
     kde-plasma = "null";
   };
