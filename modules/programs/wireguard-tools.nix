@@ -1,6 +1,5 @@
-{ config, lib, ... }:
+{ config, lib, pkgs, ... }:
 {
-  config = lib.mkIf config.hyperos.programs.wireguard-tools.enable {
-    boot.extraModulePackages = [ config.boot.kernelPackages.wireguard ];
-  };
+  networking.wireguard.enable = true;
+  environment.systemPackages = [ pkgs.wireguard-tools ];
 }

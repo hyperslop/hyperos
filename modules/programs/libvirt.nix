@@ -1,4 +1,4 @@
-{ config, lib, ... }:
+{ config, lib, pkgs, ... }:
 {
   config = lib.mkIf config.hyperos.programs.libvirt.enable {
   virtualisation.libvirtd.enable = true;
@@ -7,5 +7,6 @@
     package = pkgs.qemu_kvm;
     swtpm.enable = true;  # TPM emulation support
     #ovmf.enable = true;   # UEFI support for VMs
+    };
   };
 }
