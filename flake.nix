@@ -58,7 +58,6 @@
       modules = [
         ./hosts/default/hardware.nix
         ./hosts/default/default.nix
-        ./default.nix
         nix-flatpak.nixosModules.nix-flatpak
         inputs.home-manager.nixosModules.default
       ];
@@ -72,7 +71,6 @@
       modules = [
         ./hosts/hyper-desktop/hardware.nix
         ./hosts/hyper-desktop/default.nix
-        ./default.nix
         nix-flatpak.nixosModules.nix-flatpak
         inputs.home-manager.nixosModules.default
       ];
@@ -85,7 +83,6 @@
       modules = [
         ./hosts/hyper-laptop/hardware.nix
         ./hosts/hyper-laptop/default.nix
-        ./default.nix
         nixos-hardware.nixosModules.lenovo-thinkpad-t440p
         nix-flatpak.nixosModules.nix-flatpak
         inputs.home-manager.nixosModules.default

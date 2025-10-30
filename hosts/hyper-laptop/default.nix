@@ -7,6 +7,8 @@
     [
       ./../../homes/hyper/hyper.nix
       ./../../modules/programs
+      ./../../modules/system
+      ./../../modules/hardware
 
       inputs.home-manager.nixosModules.default
     ];
