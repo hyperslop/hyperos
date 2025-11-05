@@ -1,4 +1,3 @@
-# modules/home-manager/kde.nix
 { config, lib, pkgs, imports, inputs, ... }:
 {
   imports = [
@@ -13,6 +12,19 @@
       theme = "breeze-dark";
       iconTheme = "breeze-dark";
     };
+
+    panels = [
+      {
+        location = "bottom";
+        hiding = "autohide";
+
+        # You might also want to configure these:
+        height = 44;  # adjust to your preference
+
+        widgets = [
+        ];
+      }
+    ];
 
     # Power management settings
     powerdevil = {
@@ -81,6 +93,17 @@
           loginMode = "emptySession";
         };
       };
+   # "plasmashellrc" = {
+   #   "PlasmaViews"."Panel 1" = {
+   #     "panelVisibility" = 1;  # 1 = auto-hide
+   #   };
+   # };
     };
   };
+
+  home.file.".config/plasmashellrc".text = ''
+    [Panel]
+    AutoHide=true
+    ShowOnHover=false
+  '';
 }
