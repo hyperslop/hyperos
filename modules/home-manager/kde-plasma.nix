@@ -33,10 +33,10 @@
           action = "nothing";
         };
         turnOffDisplay = {
-          idleTimeout = "never";
+          idleTimeout = 300;
         };
         dimDisplay = {
-          enable = false;
+          enable = true;
         };
       };
       battery = {
@@ -44,7 +44,7 @@
           action = "nothing";
         };
         turnOffDisplay = {
-          idleTimeout = "never";
+          idleTimeout = 300;
         };
         dimDisplay = {
           enable = false;

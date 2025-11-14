@@ -22,7 +22,7 @@
     "exiftool"
     "dmidecode"
     "lm_sensors"
-    "python3"
+    "rar"
 
     /**** DESKTOP ****/
 
@@ -42,6 +42,8 @@
       /* VIDEO VIEWER */
         "vlc"
         "mpv"
+      /* MISC */
+        "gnome-disk-utility"
 
     /**** ONLINE-COMMUNICATION ****/
 
@@ -107,6 +109,8 @@
       "lutris"
       "prismlauncher"
       "sober"
+      "mangohud"
+      "protonplus"
 
       /* GAME EMULATION */
         "retroarch" #Emulator frontend for libretro
@@ -173,6 +177,8 @@
     rpcs3 = "stable"; #compiles 10/28/25
     ollama = "stable"; #compiles 10/28/25
     ollama-cuda = "stable"; #compiles 10/28/25
+    protonvpn-gui = "stable";
+    python3 = "stable";
 
     sddm-custom = "null";
     sonobus-flatpak = "null";
