@@ -54,6 +54,7 @@
     /**** ONLINE-MEDIA ****/
       /* VIDEO */
         "yt-dlp"
+        "freetube"
       /* IMAGE */
         "gallery-dl"
       /* MUSIC */
