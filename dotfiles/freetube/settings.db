@@ -1,4 +1,4 @@
-{"_id":"bounds","value":{"x":0,"y":0,"width":1080,"height":1265,"maximized":false,"fullScreen":false}}
+{"_id":"bounds","value":{"x":0,"y":0,"width":1080,"height":1265,"maximized":true,"fullScreen":false}}
 {"_id":"defaultProfile","value":"svMatOwKuRP8vuB5"}
 {"_id":"defaultQuality","value":"144"}
 {"_id":"defaultViewingMode","value":"default"}

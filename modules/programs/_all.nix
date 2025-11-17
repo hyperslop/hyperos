@@ -155,6 +155,8 @@
         "libvirt"
         "qemu"
         "quickemu"
+        "quickgui"
+        "OVMF"
 
     /**** PRIVACY ****/
 
@@ -179,6 +181,7 @@
     ollama-cuda = "stable"; #compiles 10/28/25
     protonvpn-gui = "stable";
     python3 = "stable";
+    shadps4 = "stable";
 
     sddm-custom = "null";
     sonobus-flatpak = "null";
