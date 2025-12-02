@@ -3,7 +3,7 @@
 {
   programs.git = {
     enable = true;
-    extraConfig = {
+    settings = {
     #git default branch is master, on git hosting sites its main.
 	init.defaultBranch = "main";
 	#solves dubious ownership warning

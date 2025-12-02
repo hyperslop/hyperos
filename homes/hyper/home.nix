@@ -26,8 +26,10 @@
 
 
   programs.git = lib.mkIf (options.programs.git ? enable) {
-    userName = "hyperslop";
-    userEmail = "hyperslop@proton.me";
+    settings = {
+      user.name = "hyperslop";
+      user.email = "hyperslop@proton.me";
+    };
   };
 
 
