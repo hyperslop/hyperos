@@ -23,6 +23,7 @@
     "dmidecode"
     "lm_sensors"
     "rar"
+    "zulu25"
 
     /**** DESKTOP ****/
 
@@ -102,6 +103,7 @@
       "mandelbulber"
       "projectm_3"
       "ladybird"
+      "celestia"
 
     /**** GAMING ****/
 
@@ -111,7 +113,10 @@
       "sober"
       "mangohud"
       "protonplus"
+      "steam-run-free"
 
+      /* MOD STUFF */
+        "satisfactorymodmanager"
       /* GAME EMULATION */
         "retroarch" #Emulator frontend for libretro
 
@@ -183,10 +188,10 @@
     python3 = "stable";
     shadps4 = "stable";
 
-    sddm-custom = "null";
-    sonobus-flatpak = "null";
-    xnviewmp-flatpak = "null";
-    sober = "null";
-    kde-plasma = "null";
+    sddm-custom = null;
+    sonobus-flatpak = null;
+    xnviewmp-flatpak = null;
+    sober = null;
+    kde-plasma = null;
   };
 }

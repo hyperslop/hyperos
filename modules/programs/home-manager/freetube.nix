@@ -1,7 +1,7 @@
 { config, pkgs, lib, ... }:
 
 let
-  sharedConfig = import ../../dotfiles;
+  sharedConfig = import ../../../dotfiles;
   dotfilesDir = sharedConfig.dotfilesDir;
 in
 {

@@ -151,7 +151,7 @@
       name = "firefox-default";
       desktopName = "Firefox (Default)";
       exec = "firefox -P default --class=firefox-default";
-      icon = "${../../dotfiles/firefox-default.png}";
+      icon = "${../../../dotfiles/firefox-default.png}";
       categories = [ "Network" "WebBrowser" ];
       startupWMClass = "firefox-default";
     })
@@ -159,7 +159,7 @@
       name = "firefox-anon";
       desktopName = "Firefox (Anon)";
       exec = "firefox -P anon --class=firefox-anon";
-      icon = "${../../dotfiles/firefox-anon.png}";
+      icon = "${../../../dotfiles/firefox-anon.png}";
       categories = [ "Network" "WebBrowser" ];
       startupWMClass = "firefox-anon";
     })
@@ -167,7 +167,7 @@
       name = "firefox-misc";
       desktopName = "Firefox (Misc)";
       exec = "firefox -P misc --class=firefox-misc";
-      icon = "${../../dotfiles/firefox-misc.png}";
+      icon = "${../../../dotfiles/firefox-misc.png}";
       categories = [ "Network" "WebBrowser" ];
       startupWMClass = "firefox-misc";
     })

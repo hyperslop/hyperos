@@ -7,7 +7,7 @@
     accent = "mauve";
     font  = "Noto Sans";
     fontSize = "9";
-    background = "${../../dotfiles/login.jpg}";
+    background = "${../../../dotfiles/login.jpg}";
     loginBackground = true;
     }
   )];
