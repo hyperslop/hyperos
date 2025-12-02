@@ -48,7 +48,7 @@ let
   hostname =
     if args ? networking && args.networking ? hostName
     then args.networking.hostName
-    else null;
+    else "unknown";
 
   # Gets config location for a specific program
   getConfigPaths = programName: {
