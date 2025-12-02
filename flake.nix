@@ -69,8 +69,8 @@
         inherit pkgs-stable;
       };
       modules = [
-        ./hosts/hyper-desktop/hardware.nix
-        ./hosts/hyper-desktop/default.nix
+        ./hosts/pc/hardware.nix
+        ./hosts/pc/default.nix
         nix-flatpak.nixosModules.nix-flatpak
         inputs.home-manager.nixosModules.default
       ];
