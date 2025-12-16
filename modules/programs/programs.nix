@@ -24,6 +24,8 @@
     "lm_sensors"
     "rar"
     "zulu25"
+    "fuse-overlayfs"
+    "gcc"
 
     /**** DESKTOP ****/
 
@@ -114,6 +116,8 @@
       "mangohud"
       "protonplus"
       "steam-run-free"
+      "gamescope"
+      "gamemode"
 
       /* MOD STUFF */
         "satisfactorymodmanager"
@@ -149,6 +153,7 @@
       "podman"
       "docker"
       "waydroid"
+      "wine-staging"	
 
         /*** QEMU/KVM ***/
 

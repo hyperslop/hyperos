@@ -49,6 +49,7 @@
           enable = true;
           enableAllSections = true;
         };
+	search.default = "ddg";
         userChrome = ''
         #nav-bar::after {
           content: "D" !important;
@@ -86,6 +87,7 @@
           enable = true;
           enableAllSections = true;
         };
+	search.default = "ddg";
         userChrome = ''
         #nav-bar::after {
           content: "A" !important;
@@ -123,6 +125,7 @@
           enable = true;
           enableAllSections = true;
         };
+	search.default = "ddg";
         userChrome = ''
         #nav-bar::after {
           content: "M" !important;

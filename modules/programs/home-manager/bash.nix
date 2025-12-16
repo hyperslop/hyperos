@@ -14,7 +14,7 @@
     '';
 
     shellAliases = {
-      #ll = "ls -la";
+      ll = "ls -la";
     };
   };
 }
