@@ -105,44 +105,50 @@ let
 
   #-------------------------
 
-  mkProgramConfig = programName:
-    let
-      cfg = config.hyperos.programs.${programName};
-      packageSource = getPackageSource programName;
-      pkgSet = resolvePkgSet packageSource;
-      package = getPackageFromPath programName pkgSet;
-      configs = selectConfigFiles programName;
+mkProgramConfig = programName:
+  let
+    cfg = config.hyperos.programs.${programName};
+    packageSource = getPackageSource programName;
+    pkgSet = resolvePkgSet packageSource;
+    package = getPackageFromPath programName pkgSet;
+    configs = selectConfigFiles programName;
 
-      # Get user-specific configs for all specified users
-      userHomeManagerConfigs =
-        map (username: getUserHomeManagerPath programName username)
-            config.hyperos.users;
+    # Get user-specific configs for all specified users
+    userHomeManagerConfigs =
+      map (username: getUserHomeManagerPath programName username)
+          config.hyperos.users;
 
-      # Filter to only existing files
-      existingUserConfigs = builtins.filter fileExists userHomeManagerConfigs;
+    # Filter to only existing files
+    existingUserConfigs = builtins.filter fileExists userHomeManagerConfigs;
 
-      # Combine all home-manager configs: base + user-specific
-      # Later configs in the list have higher priority due to how sharedModules works
-      allHomeManagerConfigs = configs.baseHomeManager ++ existingUserConfigs;
-    in
-    lib.mkIf cfg.enable (lib.mkMerge [
-      # Install the package if it exists
-      (lib.mkIf (packageSource != null && package != null) {
-        environment.systemPackages = [ package ];
-      })
+    # Combine all home-manager configs: base + user-specific
+    # Later configs in the list have higher priority
+    allHomeManagerConfigs = configs.baseHomeManager ++ existingUserConfigs;
 
-      # Warn if package not found
-      (lib.mkIf (packageSource != null && package == null) {
-        warnings = [
-          "Package '${programName}' not found in '${packageSource}' package set"
-        ];
-      })
+    # Select only the highest priority (last) config
+    highestPriorityConfig =
+      if allHomeManagerConfigs != []
+      then builtins.elemAt allHomeManagerConfigs ((builtins.length allHomeManagerConfigs) - 1)
+      else null;
+  in
+  lib.mkIf cfg.enable (lib.mkMerge [
+    # Install the package if it exists
+    (lib.mkIf (packageSource != null && package != null) {
+      environment.systemPackages = [ package ];
+    })
 
-      # Import home-manager configs if they exist and are enabled
-      (lib.mkIf (allHomeManagerConfigs != [] && cfg.enableHomeManager) {
-        home-manager.sharedModules = allHomeManagerConfigs;
-      })
-    ]);
+    # Warn if package not found
+    (lib.mkIf (packageSource != null && package == null) {
+      warnings = [
+        "Package '${programName}' not found in '${packageSource}' package set"
+      ];
+    })
+
+    # Import ONLY the highest priority home-manager config if it exists and is enabled
+    (lib.mkIf (highestPriorityConfig != null && cfg.enableHomeManager) {
+      home-manager.sharedModules = [ highestPriorityConfig ];
+    })
+  ]);
 
   # Collect all NixOS config files
   nixosConfigModules = builtins.filter
