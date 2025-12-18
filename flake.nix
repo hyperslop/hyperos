@@ -87,8 +87,7 @@
         inherit pkgs-stable;
       };
       modules = [
-        ./hosts/hyper-laptop/hardware.nix
-        ./hosts/hyper-laptop/default.nix
+        ./hosts/laptop/default.nix
         nixos-hardware.nixosModules.lenovo-thinkpad-t440p
         nix-flatpak.nixosModules.nix-flatpak
       ];

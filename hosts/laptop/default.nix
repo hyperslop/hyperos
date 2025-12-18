@@ -1,21 +1,26 @@
 # NixOS manual is accessible by running ‘nixos-help’
 
-{ config, pkgs, inputs, ... }:
+{ config, pkgs, inputs, lib, ... }:
 
 {
   imports =
     [
+      ./hardware.nix
       ./../../homes/hyper/hyper.nix
-      ./../../lib/mkProgramOptions.nix
-      ./../../modules/system
-      ./../../modules/hardware
+      ./../../lib
+
 
       inputs.home-manager.nixosModules.default
     ];
 
-  hyperos.programs.all.enable = true;
-  hyperos.users = [ "hyper" ];
 
+  hyperos.programs.all.enable = true;
+  hyperos.system.all.enable = true;
+  hyperos.hardware.all.enable = true;
+
+  hyperos.hardware.nvidia.enable = lib.mkForce false;
+
+  hyperos.users = [ "hyper" ];
   home-manager = {
     useGlobalPkgs = true;    # Use system's nixpkgs
     useUserPackages = true;
