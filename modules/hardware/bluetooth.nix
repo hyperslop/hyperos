@@ -1,6 +1,8 @@
-{ config, pkgs, inputs, ... }:
+{ config, pkgs, inputs, lib, ... }:
 
 {
-  hardware.bluetooth.enable = true;
-  hardware.bluetooth.powerOnBoot = true;
+  config = lib.mkIf config.hyperos.hardware.bluetooth.enable {
+    hardware.bluetooth.enable = true;
+    hardware.bluetooth.powerOnBoot = true;
+  };
 }

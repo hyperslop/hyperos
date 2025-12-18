@@ -1,24 +1,26 @@
-{ config, pkgs, ... }:
+{ config, pkgs, lib, ... }:
 {
-  hardware.graphics = {
-    enable = true;
-  };
+  config = lib.mkIf config.hyperos.hardware.nvidia.enable {
+    hardware.graphics = {
+      enable = true;
+    };
 
-  services.xserver.videoDrivers = ["nvidia"];
+    services.xserver.videoDrivers = ["nvidia"];
 
-  hardware.nvidia = {
+    hardware.nvidia = {
 
-    modesetting.enable = true;
+      modesetting.enable = true;
 
-    powerManagement.enable = false;
+      powerManagement.enable = false;
 
-    powerManagement.finegrained = false;
+      powerManagement.finegrained = false;
 
-    open = false; #use nvidia open source kernal module
+      open = false; #use nvidia open source kernal module
 
-   nvidiaSettings = true; #enable nvidia nvidiaSettings
+    nvidiaSettings = true; #enable nvidia nvidiaSettings
 
-    package = config.boot.kernelPackages.nvidiaPackages.beta;
+      package = config.boot.kernelPackages.nvidiaPackages.beta;
 
+    };
   };
 }
