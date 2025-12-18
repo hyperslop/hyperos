@@ -15,6 +15,7 @@ programs.firefox = lib.mkIf (options.programs.firefox ? enable) {
       ogfirefox = {
         id = 0;
         isDefault = false;
+        search.force = true; #Force overwrite search configs that conflict with home-manager
         extensions.packages = with inputs.firefox-addons.packages."x86_64-linux"; [
           ublock-origin
         ];
@@ -39,6 +40,7 @@ programs.firefox = lib.mkIf (options.programs.firefox ? enable) {
           enableAllSections = true;
         };
 	search.default = "ddg";
+	search.force = true; #Force overwrite search configs that conflict with home-manager
         userChrome = ''
         #nav-bar::after {
           content: "D" !important;
@@ -77,6 +79,7 @@ programs.firefox = lib.mkIf (options.programs.firefox ? enable) {
           enableAllSections = true;
         };
 	search.default = "ddg";
+	search.force = true; #Force overwrite search configs that conflict with home-manager
         userChrome = ''
         #nav-bar::after {
           content: "A" !important;
@@ -115,6 +118,7 @@ programs.firefox = lib.mkIf (options.programs.firefox ? enable) {
           enableAllSections = true;
         };
 	search.default = "ddg";
+	search.force = true; #Force overwrite search configs that conflict with home-manager
         userChrome = ''
         #nav-bar::after {
           content: "M" !important;
@@ -153,6 +157,7 @@ programs.firefox = lib.mkIf (options.programs.firefox ? enable) {
           enableAllSections = true;
         };
 	search.default = "ddg";
+	search.force = true; #Force overwrite search configs that conflict with home-manager
         userChrome = ''
         #nav-bar::after {
           content: "H" !important;
@@ -191,6 +196,7 @@ programs.firefox = lib.mkIf (options.programs.firefox ? enable) {
           enableAllSections = true;
         };
 	search.default = "ddg";
+	search.force = true; #Force overwrite search configs that conflict with home-manager
         userChrome = ''
         #nav-bar::after {
           content: "S" !important;
@@ -229,6 +235,7 @@ programs.firefox = lib.mkIf (options.programs.firefox ? enable) {
           enableAllSections = true;
         };
 	search.default = "ddg";
+	search.force = true; #Force overwrite search configs that conflict with home-manager
         userChrome = ''
         #nav-bar::after {
           content: "W" !important;
