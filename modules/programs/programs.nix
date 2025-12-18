@@ -31,7 +31,7 @@
 
     "hyprland"
     "kde-plasma"
-    "sddm-custom"
+    "sddm"
 
     /**** BASIC-APPS ****/
 
@@ -67,7 +67,7 @@
         "spotify"
         "ncspot"
         "spotdl"
-        "sonobus-flatpak"
+        "sonobus"
       /* GENERAL */
         "qbittorrent"
 
@@ -77,7 +77,7 @@
         "darktable"
         "digikam"
 
-        "xnviewmp-flatpak" #remove later?
+        "xnviewmp" #remove later?
         "geeqie" #remove later?
       /* IMAGES */
         "gimp"
@@ -185,18 +185,19 @@
 
   packageSources = {
     davinci-resolve = "stable";
-    azahar = "stable"; #compiles 10/28/25
-    rpcs3 = "stable"; #compiles 10/28/25
-    ollama = "stable"; #compiles 10/28/25
-    ollama-cuda = "stable"; #compiles 10/28/25
+    azahar = "stable";
+    rpcs3 = "stable";
+    ollama = "stable";
+    ollama-cuda = "stable";
     protonvpn-gui = "stable";
     python3 = "stable";
     shadps4 = "stable";
 
-    sddm-custom = null;
-    sonobus-flatpak = null;
-    xnviewmp-flatpak = null;
-    sober = null;
+    sonobus = "flatpak";
+    xnviewmp = "flatpak";
+    sober = "flatpak";
+
+    sddm = null;
     kde-plasma = null;
   };
 }

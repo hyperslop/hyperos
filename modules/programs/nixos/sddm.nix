@@ -1,6 +1,6 @@
 { config, lib, pkgs, ... }:
 {
-  config = lib.mkIf config.hyperos.programs.sddm-custom.enable {
+  config = lib.mkIf config.hyperos.programs.sddm.enable {
   environment.systemPackages = [(
   pkgs.catppuccin-sddm.override {
     flavor = "mocha";
