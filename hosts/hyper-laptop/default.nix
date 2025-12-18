@@ -6,7 +6,7 @@
   imports =
     [
       ./../../homes/hyper/hyper.nix
-      ./../../modules/programs
+      ./../../lib/mkProgramOptions.nix
       ./../../modules/system
       ./../../modules/hardware
 
@@ -14,6 +14,7 @@
     ];
 
   hyperos.programs.all.enable = true;
+  hyperos.users = [ "hyper" ];
 
   home-manager = {
     useGlobalPkgs = true;    # Use system's nixpkgs
