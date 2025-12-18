@@ -1,106 +1,96 @@
-# HyperOS: My NixOS Configuration
-### Everything necessary to completely recreate my systems, and easily make new systems.
+# HyperOS: The Better NixOS Configuration
 
-## Understanding the layout simply:
-
-- `dotfiles/` non home-manager user level files
-- `flake.nix` my system flake
-- `homes/` folder to define specific users
-- `hosts/` folder to define specific machines
-- `lib/` folder to put commonly used functions
-- `modules/` modules of software + nix code set to options
-- `pkgs/` custom made packages
-- `secrets/` encrypted secrets
+### 🗣️🗣️🗣️ Everything entirely necessary for the overtly sane desktop experience 🗣️🗣️🗣️
 
 ## Features:
 
-- I'll list them later when I remember
++ modular system structure
+  + easily make new hosts and users configurations specific and seperate
++ granular control, use and automatically create toggle options for easy system/user definiton
+  + easy preconfigured profiles with many applications configured for common uses
+  + custom program options that seemlessly combine user and system level configuration
+  + single source of truth for all programs configured for hyperos
+  
+## Working On:
++ custom easy, fast, and secure fully declared virtual machines
+  + toggle easy vm templates for specific uses
+  + include options in vm definitions, the same as normal hosts
+  + easy options for common vm specific requirements
+  
+## Future Plans:
++ store dynamic files for specific programs in an easy way, transfer between machines automatically
+  + browser bookmarks
+  + freetube subscriptions
+  + video game saves
+    + store this in a place that gets pulled and pushed from and is setup by system automatically? no need for version control.
++ easy encryption and integration for sensative data required for configuration
 
-## To do
-
-- move everything in hyperos/default.nix into modules/
-- setup profiles
-- setup secrets
-- setup zfs or btrfs immutibility
-- setup nixos server
-- fix default machine and user to work with new modules
     
 ## Try HyperOS: It's so good!
 
 1. "find" a computer with nixos installed
 2. clone this repository to any spot
-3. move hardware.nix to hosts/(hostname). To generate use nixos-generate-config
 4. Copy the hosts/default/default.nix file to your host, edit it as you choose
-    - make it easy options like `hyperos.profiles.desktop.enabled = true` or `hyperos.programs.steam.enabled = true`
-5. Copy the homes/default/default.nix and home.nix into gomes/(youruser)/, edit it as you choose
-    - add stuff here if you want them to only be installed if your user is added to a machine
-6. In flake.nix, copy the default flake code. Rename and import your hosts/host/default.nix
-7. run `sudo nixos-rebuild switch --flake .#hostname`
+    -options like `hyperos.profiles.desktop.enabled = true` or `hyperos.programs.steam.enabled = true` with my objectivly correct configs
+5. Copy the homes/default/default.nix and home.nix into homes/(youruser)/, edit it as you choose
+6. In flake.nix make a machine for yourself
+7. `sudo nixos-rebuild switch --flake .#hostname`
 
-## Understanding the layout fully
-```
-dotfiles/ 
-    program.txt
-    program2.txt
-```
+## The Layout Explained
 ```
 flake.nix
-```
-```
+
 homes/
     user1/
-        default.nix
-        home.nix
-    user2/
-        home-manager/ #home-manager configurations just for this user
-            program1.nix
-            program2.nix 
         default.nix #defines the user
         home.nix #defines the user home-manager configuration
-```
-```
+        
+        home-manager/ #user level override for programs for this user
+            program1.nix #custom override for hyperos.programs.program1
+
 hosts/
     machine1/
-        default.nix
-        hardware.nix
-    machine2
         default.nix # defines system specific configuration
         hardware.nix # defines hardware specifics for that system
-```
-```
-lib/
-    default.nix #imports all lib for easy use
-    mkSomething.nix
-    mkSomething2.nix
-```
-```
-modules/ #set options inside of hosts/machine/ or homes/user/
+        
+        home-manager/ #user level override for programs for this machine
+            program1.nix
+            
+        nixos/ #system level ovveride for programs for this machine
+            program2.nix
+            
+modules/ #toggleable options to use inside of hosts/<machine>/ or homes/<user>/
+
     hardware/
-        cpu.nix
-        gpu.nix #hyperos.hardware.gpu.nvidia.enabled = true;
-    home-manager/
-        program1.nix 
-        program2.nix #hyperos.programs.program2.enabled = true;
-    profiles/
-        base.nix
+        nvidia.nix #hyperos.hardware.nvidia.enable = <true/false>
+        
+    system/
+        boot.nix #hyperos.system.boot
+        
+    profiles/ #useful combinations of options
         desktop.nix
         gaming.nix
-    programs/
-        _all.nix #single source of truth for possible software on hyperos systems
-        default.nix #option creation logic
-        program1.nix
-        program2.nix #hyperos.programs.program2.enabled = true;
-    system/
-        boot.nix
-        audio.nix
         
-    README.md #more information on modules
-```
-```
-pkgs/
-    program3.nix #not in nixpkgs, flatpak, etc
-```
-```
+    programs/
+        programs.nix #list of all programs, hyperos.programs.example
+        
+        /* Any combination or lack of system or user level configurations can exist or
+        can be automatically overriden, if it exist at the hosts/<machine>/ or homes/<user>/ level.
+        It's all combined into a single programs.option for each program */
+      
+        nixos/ #system level configuration for programs
+            program1.nix 
+            
+        home-manager/ #user level configuration for programs
+            program1.nix
+
+lib/ #system logic
+
+pkgs/ #custom programs
+
+dotfiles/ #user level data not possible to store with home-manager
+
 secrets/
     samsara-control-matrix-passw.txt #ENCRYPTED ❌ CRANK WEINER HARDER FEDS 💯🤡 ALL MINE 😂
+
 ```
