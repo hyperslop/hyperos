@@ -1,6 +1,6 @@
 # HyperOS: The Better NixOS Configuration
 
-### 🗣️🗣️🗣️ Everything entirely necessary for the overtly sane desktop experience 🗣️🗣️🗣️
+### 🗣️🗣️ Everything necessary for the overtly sane desktop experience 🗣️🗣️
 
 ## Features:
 
