@@ -29,6 +29,10 @@
       inputs.home-manager.follows = "home-manager";
     };
 
+    microvm = {
+      url = "github:astro/microvm.nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = {
@@ -40,6 +44,7 @@
   nix-flatpak,
   arkenfox-nixos,
   plasma-manager,
+  microvm,
   ...
   }@inputs:
   let
@@ -59,7 +64,6 @@
         ./hosts/default/hardware.nix
         ./hosts/default/default.nix
         nix-flatpak.nixosModules.nix-flatpak
-        inputs.home-manager.nixosModules.default
       ];
     };
 
@@ -69,10 +73,12 @@
         inherit pkgs-stable;
       };
       modules = [
-        ./hosts/pc/hardware.nix
         ./hosts/pc/default.nix
         nix-flatpak.nixosModules.nix-flatpak
-        inputs.home-manager.nixosModules.default
+        microvm.nixosModules.host
+
+        #test vm
+        #./modules/system/vms/test.nix
       ];
     };
     nixosConfigurations.laptop = nixpkgs.lib.nixosSystem { #setup for my laptop computer
@@ -85,7 +91,6 @@
         ./hosts/hyper-laptop/default.nix
         nixos-hardware.nixosModules.lenovo-thinkpad-t440p
         nix-flatpak.nixosModules.nix-flatpak
-        inputs.home-manager.nixosModules.default
       ];
     };
   };
