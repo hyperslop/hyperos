@@ -22,6 +22,11 @@
         height = 44;  # adjust to your preference
 
         widgets = [
+          "org.kde.plasma.kickoff"           # Application launcher
+          "org.kde.plasma.icontasks"         # Task manager (your taskbar)
+          "org.kde.plasma.marginsseparator"  # Spacer
+          "org.kde.plasma.systemtray"        # System tray
+          "org.kde.plasma.digitalclock"      # Clock
         ];
       }
     ];
@@ -100,10 +105,4 @@
    # };
     };
   };
-
-  home.file.".config/plasmashellrc".text = ''
-    [Panel]
-    AutoHide=true
-    ShowOnHover=false
-  '';
 }
