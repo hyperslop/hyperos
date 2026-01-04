@@ -26,12 +26,21 @@
     "zulu25"
     "fuse-overlayfs"
     "gcc"
+    "pciutils"
+
+    "bottles"
+    "vital"
+    "tcpdump"
+
+    "mesa-demos"
+    "vulkan-tools"
 
     /**** DESKTOP ****/
 
     "hyprland"
     "kde-plasma"
     "sddm"
+    "rofi"
 
     /**** BASIC-APPS ****/
 
@@ -106,6 +115,8 @@
       "projectm_3"
       "ladybird"
       "celestia"
+      "synthesia"
+      "neothesia"
 
     /**** GAMING ****/
 
@@ -163,7 +174,7 @@
         "spice-gtk"
         "spice-protocol"
         "libvirt"
-        "qemu"
+        "qemu_full"
         "quickemu"
         "quickgui"
         "OVMF"
