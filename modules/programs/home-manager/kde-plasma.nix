@@ -7,6 +7,18 @@
   programs.plasma = {
     enable = true;
 
+  hotkeys.commands."launch-rofi" = {
+    name = "Launch Rofi";
+    key = "Meta+Space";
+    command = "rofi -show drun -show-icons -theme DarkBlue";
+  };
+
+  shortcuts = {
+    "kwin" = {
+      "Window Close" = "Ctrl+Q";
+    };
+  };
+
     workspace = {
       colorScheme = "BreezeDark";
       theme = "breeze-dark";
@@ -27,6 +39,7 @@
           "org.kde.plasma.marginsseparator"  # Spacer
           "org.kde.plasma.systemtray"        # System tray
           "org.kde.plasma.digitalclock"      # Clock
+          "org.kde.plasma.activitypager"
         ];
       }
     ];
@@ -87,6 +100,9 @@
       };
 
       "kwinrc" = {
+      "Windows" = {
+        "Placement" = "Smart";  # Maximizing, Centered, Smart, Cascade, Random
+      };
         "Desktops" = {
           "Number" = 10;
           "Rows" = 2;
@@ -103,6 +119,11 @@
    #     "panelVisibility" = 1;  # 1 = auto-hide
    #   };
    # };
+
+
     };
   };
+
+
+
 }
