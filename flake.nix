@@ -4,13 +4,21 @@
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-25.05";
+
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
+
     nix-flatpak.url = "github:gmodena/nix-flatpak/?ref=latest";
+
     arkenfox-nixos.url = "github:dwarfmaster/arkenfox-nixos";
 
+    sops-nix = {
+      url = "github:Mic92/sops-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     hyprland = {
-	url = "github:hyprwm/Hyprland";
-	inputs.nixpkgs.follows = "nixpkgs";
+      url = "github:hyprwm/Hyprland";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
 
     home-manager = {
@@ -30,22 +38,28 @@
     };
 
     microvm = {
-      url = "github:astro/microvm.nix";
-      inputs.nixpkgs.follows = "nixpkgs";
+      url = "github:microvm-nix/microvm.nix";
+    };
+
+   spectrum-os = {
+      url = "git+https://spectrum-os.org/git/nixpkgs";
+      flake = false;  # It's not a flake, just a nixpkgs fork
     };
   };
 
   outputs = {
-  self,
-  nixpkgs,
-  nixpkgs-stable,
-  home-manager,
-  nixos-hardware,
-  nix-flatpak,
-  arkenfox-nixos,
-  plasma-manager,
-  microvm,
-  ...
+    self,
+    nixpkgs,
+    nixpkgs-stable,
+    home-manager,
+    nixos-hardware,
+    nix-flatpak,
+    arkenfox-nixos,
+    plasma-manager,
+    microvm,
+    sops-nix,
+    spectrum-os,
+    ...
   }@inputs:
   let
     system = "x86_64-linux";
@@ -54,43 +68,58 @@
       inherit system;
       config.allowUnfree = true;
     };
+
+    # Import all VMs using the mkVms helper
+#    overlays = import ./overlays { inherit inputs; };
+    availableVms = import ./lib/mkVms.nix { inherit inputs; };
+
   in {
-    nixosConfigurations.default = nixpkgs.lib.nixosSystem { #default machine
-      specialArgs = {
-        inherit inputs;
-        inherit pkgs-stable;
+    nixosConfigurations = {
+      default = nixpkgs.lib.nixosSystem {
+        specialArgs = {
+          inherit inputs;
+          inherit pkgs-stable;
+        };
+        modules = [
+          ./hosts/default/hardware.nix
+          ./hosts/default/default.nix
+          ./lib
+          nix-flatpak.nixosModules.nix-flatpak
+        ];
       };
-      modules = [
-        ./hosts/default/hardware.nix
-        ./hosts/default/default.nix
-        nix-flatpak.nixosModules.nix-flatpak
-      ];
-    };
 
-    nixosConfigurations.desktop = nixpkgs.lib.nixosSystem { #setup for my desktop computer
-      specialArgs = {
-        inherit inputs;
-        inherit pkgs-stable;
+      desktop = nixpkgs.lib.nixosSystem {
+        specialArgs = {
+          inherit inputs;
+          inherit pkgs-stable;
+        };
+        modules = [
+          ./hosts/pc/default.nix
+          ./lib
+          nix-flatpak.nixosModules.nix-flatpak
+          microvm.nixosModules.host
+        ];
       };
-      modules = [
-        ./hosts/pc/default.nix
-        nix-flatpak.nixosModules.nix-flatpak
-        microvm.nixosModules.host
 
-        #test vm
-        #./modules/system/vms/test.nix
-      ];
-    };
-    nixosConfigurations.laptop = nixpkgs.lib.nixosSystem { #setup for my laptop computer
-      specialArgs = {
-        inherit inputs;
-        inherit pkgs-stable;
+      laptop = nixpkgs.lib.nixosSystem {
+        specialArgs = {
+          inherit inputs;
+          inherit pkgs-stable;
+        };
+        modules = [
+          ./hosts/laptop/default.nix
+          ./lib
+          nixos-hardware.nixosModules.lenovo-thinkpad-t440p
+          nix-flatpak.nixosModules.nix-flatpak
+        ];
       };
-      modules = [
-        ./hosts/laptop/default.nix
-        nixos-hardware.nixosModules.lenovo-thinkpad-t440p
-        nix-flatpak.nixosModules.nix-flatpak
-      ];
-    };
+    } // availableVms;  # Merge in all VMs
+
+    # Create apps for all VMs
+   apps.${system} = builtins.mapAttrs (name: vm: {
+      type = "app";
+      program = "${vm.config.microvm.declaredRunner}/bin/microvm-run";
+   }) availableVms;
+
   };
 }

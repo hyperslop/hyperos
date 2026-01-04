@@ -1,0 +1,12 @@
+keys:
+  # Your personal age key (from age-keygen -y)
+  - &admin_key age1cp6hk2lsauyf8ape6yszegjhyw8ye2mdhlu8qec569qqtrq4audscs853s
+  # Host key - generated from SSH host key (see below)
+  - &host_key age1vrhz4ax0ye4s8hu5vzspgu2l5skze04d2lu65zc58y8v0nqzluvsp4h6f4
+
+creation_rules:
+  - path_regex: secrets/mullvad/.*\.yaml$
+    key_groups:
+      - age:
+          - *admin_key
+          - *host_key

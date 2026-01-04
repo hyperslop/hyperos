@@ -28,7 +28,7 @@
     [ { device = "/dev/disk/by-uuid/3d7292c1-10bc-4197-bec3-7451c6cd3ac4"; }
     ];
 
-  nixpkgs.overlays = import ../../overlays { inherit pkgs-stable; };
+  nixpkgs.overlays = import ../../overlays/intel-graphics.nix { inherit pkgs-stable; };
 
   # Enables DHCP on each ethernet and wireless interface. In case of scripted networking
   # (the default) this is the recommended approach. When using systemd-networkd it's
