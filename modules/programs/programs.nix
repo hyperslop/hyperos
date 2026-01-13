@@ -35,6 +35,9 @@
     "mesa-demos"
     "vulkan-tools"
 
+    "nftables"
+    "dnsutils"
+
     /**** DESKTOP ****/
 
     "hyprland"
