@@ -17,6 +17,7 @@
   hyperos.programs.all.enable = true;
   hyperos.system.all.enable = true;
   hyperos.hardware.all.enable = true;
+  hyperos.vms.all.enable = false;
 
   hyperos.hardware.nvidia.enable = lib.mkForce false;
 
