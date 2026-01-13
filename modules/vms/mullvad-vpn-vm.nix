@@ -4,8 +4,6 @@ with lib;
 
 let
   cfg = config.hyperos.vms.mullvad-vpn-vm;
-  # For testing: put your Mullvad private key directly here
-  # SECURITY WARNING: This is for testing only! Never commit this to git!
   mullvadPrivateKey = "PLACEHOLDER";
 in
 {
@@ -14,7 +12,7 @@ in
   };
 
   config = mkIf cfg.enable {
-    # Configure the host side of the network
+    # Host network configuration
     systemd.network = {
       enable = true;
 
@@ -29,26 +27,30 @@ in
         matchConfig.Name = "vm-mullvad";
         address = [ "10.0.0.1/24" ];
         networkConfig = {
-          DHCPServer = "no";
-          IPv4Forwarding = "yes";
-          IPv6Forwarding = "yes";
+          DHCPServer = false;
+          IPv4Forwarding = true;
+          IPv6Forwarding = true;
           IPMasquerade = "both";
         };
+
+        # Routes for table 100
+        routes = [
+          {
+            Gateway = "10.0.0.2";
+            Table = 100;
+          }
+          {
+            Destination = "10.0.0.0/24";
+            Table = 100;
+          }
+        ];
       };
     };
 
     # Enable IP forwarding on host
-    boot.kernel.sysctl = {
-      "net.ipv4.ip_forward" = 1;
-      "net.ipv6.conf.all.forwarding" = 1;
-    };
 
-    # Use microvm.nix's interface directly
     microvm.vms.mullvad-vpn-vm = {
-      specialArgs = {
-        inherit inputs;
-        #something was imported here?
-      };
+      specialArgs = { inherit inputs; };
       autostart = true;
 
       config = { config, ... }: {
@@ -72,12 +74,10 @@ in
         };
 
         users.users.root.password = "root";
-        #ssh root@10.0.0.2
 
-        # Use the simpler networking.interfaces approach instead of systemd.network
         networking = {
           hostName = "mullvad-vpn-vm";
-          useNetworkd = false;  # Changed to false - use traditional networking
+          useNetworkd = false;
           useDHCP = false;
 
           interfaces.eth0 = {
@@ -93,87 +93,35 @@ in
             interface = "eth0";
           };
 
-          nameservers = [ "100.64.0.3" "1.1.1.1" ];  # Added fallback DNS
+          # CRITICAL: Route WireGuard endpoint through eth0, not the tunnel
+          localCommands = ''
+            # Add route for WireGuard endpoint through physical gateway
+            ${pkgs.iproute2}/bin/ip route add 23.168.216.127 via 10.0.0.1 dev eth0
+
+            # Now set default route through WireGuard
+            ${pkgs.iproute2}/bin/ip route del default || true
+            ${pkgs.iproute2}/bin/ip route add default dev wg-mullvad
+          '';
+
+          # Don't set nameservers here - let resolved handle it
+          # nameservers = [ "1.1.1.1" "8.8.8.8" ];
 
           firewall = {
             enable = true;
-            trustedInterfaces = [ "wg-mullvad" ];
+            trustedInterfaces = [ "wg-mullvad" "eth0" ];
 
             extraCommands = ''
-              iptables -P INPUT DROP
-              iptables -P FORWARD DROP
-              iptables -P OUTPUT DROP
-
-              # Loopback
+              # Accept from trusted interfaces
               iptables -A INPUT -i lo -j ACCEPT
-              iptables -A OUTPUT -o lo -j ACCEPT
-
-              # CRITICAL: Allow ALL traffic on WireGuard interface FIRST
+              iptables -A INPUT -i eth0 -j ACCEPT
               iptables -A INPUT -i wg-mullvad -j ACCEPT
-              iptables -A OUTPUT -o wg-mullvad -j ACCEPT
 
-              # Established connections (this should catch WireGuard handshake responses)
-              iptables -A INPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
-              iptables -A OUTPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
-              iptables -A FORWARD -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
+              # Forward traffic from graphics-vm (via host NAT) through VPN
+              iptables -A FORWARD -i eth0 -o wg-mullvad -j ACCEPT
+              iptables -A FORWARD -i wg-mullvad -o eth0 -m state --state RELATED,ESTABLISHED -j ACCEPT
 
-              # Allow from eth0 (host network) - for SSH and management
-              iptables -A INPUT -i eth0 -s 10.0.0.0/24 -j ACCEPT
-
-              # Allow forwarding FROM eth0 (for graphics-vm traffic)
-              iptables -A FORWARD -i eth0 -s 10.0.0.0/24 -j ACCEPT
-              iptables -A FORWARD -i eth0 -s 10.0.1.0/24 -j ACCEPT
-
-              # Allow DNS out through eth0
-              iptables -A OUTPUT -o eth0 -p udp --dport 53 -j ACCEPT
-              iptables -A OUTPUT -o eth0 -p tcp --dport 53 -j ACCEPT
-
-              # Allow WireGuard protocol out through eth0
-              iptables -A OUTPUT -o eth0 -p udp --dport 51820 -j ACCEPT
-
-              # Allow ICMP for testing
-              iptables -A OUTPUT -o eth0 -p icmp -j ACCEPT
-              iptables -A INPUT -i eth0 -p icmp -j ACCEPT
-
-              # NAT for forwarded traffic through WireGuard
+              # NAT all outgoing traffic through WireGuard
               iptables -t nat -A POSTROUTING -o wg-mullvad -j MASQUERADE
-
-              # Allow forwarding through WireGuard
-              iptables -A FORWARD -o wg-mullvad -j ACCEPT
-              iptables -A FORWARD -i wg-mullvad -j ACCEPT
-            '';
-              # old ai commands, idk?
-              #iptables -A FORWARD -s 10.0.1.0/24 -j ACCEPT
-              #iptables -A FORWARD -d 10.0.1.0/24 -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
-              #iptables -A OUTPUT -o wg-mullvad -p udp --dport 53 -j ACCEPT
-              #iptables -A OUTPUT -o wg-mullvad -p tcp --dport 53 -j ACCEPT
-              #iptables -A OUTPUT -o eth0 -p tcp --dport 53 -j ACCEPT
-
-              #old WORKING commands
-              #iptables -P INPUT DROP
-              #iptables -P FORWARD DROP
-              #iptables -P OUTPUT DROP
-
-              #iptables -A INPUT -i lo -j ACCEPT
-              #iptables -A OUTPUT -o lo -j ACCEPT
-
-              #iptables -A INPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
-              #iptables -A OUTPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
-              #iptables -A FORWARD -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
-
-              #iptables -A INPUT -i eth0 -s 10.0.0.0/24 -j ACCEPT
-              #iptables -A FORWARD -i eth0 -s 10.0.0.0/24 -j ACCEPT
-
-              #iptables -A OUTPUT -o eth0 -p udp --dport 53 -j ACCEPT
-
-              #iptables -A OUTPUT -o eth0 -p udp --dport 51820 -j ACCEPT
-              #iptables -A OUTPUT -o wg-mullvad -j ACCEPT
-
-              #iptables -t nat -A POSTROUTING -o wg-mullvad -j MASQUERADE
-            extraStopCommands = ''
-              iptables -P INPUT ACCEPT
-              iptables -P FORWARD ACCEPT
-              iptables -P OUTPUT ACCEPT
             '';
           };
 
@@ -183,8 +131,10 @@ in
               "fc00:bbbb:bbbb:bb01::5:ed89/128"
             ];
 
-            # Direct private key - for testing only!
             privateKey = mullvadPrivateKey;
+
+            # Set MTU to avoid fragmentation issues in VM
+            mtu = 1420;
 
             peers = [{
               publicKey = "ikLR1TUKk+PTWFnydqwZ9m0HaD1dPaMNI9DwZTvzYBs=";
@@ -195,31 +145,15 @@ in
           };
         };
 
-        # Keep resolved for DNS
         services.resolved = {
           enable = true;
-          dnssec = "false";  # Changed to false - can cause issues
+          dnssec = "false";
           fallbackDns = [ "1.1.1.1" "8.8.8.8" ];
-          llmnr = "false";
-          extraConfig = ''
-            MulticastDNS=no
-          '';
         };
 
         boot.kernel.sysctl = {
           "net.ipv4.ip_forward" = 1;
           "net.ipv6.conf.all.forwarding" = 1;
-#          "net.ipv4.conf.all.rp_filter" = 2;
-#          "net.ipv4.conf.default.rp_filter" = 2;
-
-#          "net.ipv4.conf.eth0.rp_filter" = 0;  # Add this line
-
-#          "net.ipv4.conf.all.accept_redirects" = 0;
-#          "net.ipv4.conf.default.accept_redirects" = 0;
- #         "net.ipv4.conf.all.send_redirects" = 0;
-#          "net.ipv4.conf.default.send_redirects" = 0;
-#          "net.ipv4.conf.all.accept_source_route" = 0;
-#          "net.ipv4.conf.default.accept_source_route" = 0;
         };
 
         system.stateVersion = "24.05";
@@ -231,6 +165,7 @@ in
           curl
           bind
           jq
+          iptables
         ];
       };
     };

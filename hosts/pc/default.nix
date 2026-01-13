@@ -41,39 +41,80 @@
 
   networking.hostName = "pc"; # Define your hostname.
   networking.firewall.enable = true;
+
+  boot.kernel.sysctl = {
+    "net.ipv4.ip_forward" = 1;
+    "net.ipv6.conf.all.forwarding" = 1;
+    "net.ipv4.conf.all.send_redirects" = 0;
+    "net.ipv4.conf.default.send_redirects" = 0;
+  };
+
+  # Define routing table name
+  networking.iproute2 = {
+    enable = true;
+    rttablesExtraConfig = ''
+      100 graphics-vm
+    '';
+  };
+  #networking.defaultGateway = {
+  #  address = "10.0.0.2";
+  #  interface = "vm-mullvad";
+  #};
+  networking.firewall.checkReversePath = "loose";
   networking.firewall.extraCommands = ''
-    # Allow forwarding between the two VM networks
+    # Allow forwarding between VMs
     iptables -A FORWARD -i vm-graphics -o vm-mullvad -j ACCEPT
     iptables -A FORWARD -i vm-mullvad -o vm-graphics -m state --state RELATED,ESTABLISHED -j ACCEPT
 
-    # Allow graphics-vm to reach mullvad-vm's network
-    iptables -A FORWARD -s 10.0.1.0/24 -d 10.0.0.0/24 -j ACCEPT
-    iptables -A FORWARD -s 10.0.0.0/24 -d 10.0.1.0/24 -m state --state RELATED,ESTABLISHED -j ACCEPT
-
-    # NAT traffic from graphics-vm so it appears to come from the host when going to mullvad-vm
-    iptables -t nat -A POSTROUTING -s 10.0.1.0/24 -d 10.0.0.0/24 -j SNAT --to-source 10.0.0.1
-
-    # Block graphics-vm from accessing host services directly
-    iptables -A INPUT -i vm-graphics -d 10.0.1.1 -p tcp --dport 22 -j DROP
-    iptables -A INPUT -i vm-graphics -j DROP
-
-    # Prevent graphics-vm from accessing other private networks directly
+    # Block graphics-vm from accessing other private networks
     iptables -A FORWARD -i vm-graphics -d 192.168.0.0/16 -j DROP
     iptables -A FORWARD -i vm-graphics -d 172.16.0.0/12 -j DROP
 
-    # Allow graphics-vm to reach its own network and mullvad network
-    iptables -A FORWARD -i vm-graphics -d 10.0.1.0/24 -j ACCEPT
-    iptables -A FORWARD -i vm-graphics -d 10.0.0.0/24 -j ACCEPT
+    # NAT traffic from graphics-vm through mullvad
+    iptables -t nat -A POSTROUTING -s 10.0.1.0/24 -o vm-mullvad -j MASQUERADE
 
-    # Block all other 10.0.0.0/8 destinations
-    iptables -A FORWARD -i vm-graphics -d 10.0.0.0/8 -j DROP
+    # Block graphics-vm from accessing host services
+    iptables -A INPUT -i vm-graphics -d 10.0.1.1 -p tcp --dport 22 -j DROP
+    iptables -A INPUT -i vm-graphics -j DROP
   '';
 
-  #boot.kernel.sysctl = {
-  #  "net.ipv4.ip_forward" = 1;
-  #  "net.ipv6.conf.all.forwarding" = 1;
-  #};
-  #networking.firewall.allowedTCPPorts = [ 8554 ];
-  # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
+  systemd.services.setup-graphics-vm-routing = {
+    description = "Setup policy routing for graphics-vm";
+    after = [ "network.target" "systemd-networkd.service" ];
+    wantedBy = [ "multi-user.target" ];
+    serviceConfig = {
+      Type = "oneshot";
+      RemainAfterExit = true;
+    };
 
+  script = ''
+    # Remove old rule if it exists
+    ${pkgs.iproute2}/bin/ip rule del from 10.0.1.0/24 table 100 2>/dev/null || true
+
+    # Add the policy routing rule
+    ${pkgs.iproute2}/bin/ip rule add from 10.0.1.0/24 table 100 priority 100
+
+    echo "Policy routing rule created:"
+    ${pkgs.iproute2}/bin/ip rule show | grep "from 10.0.1.0/24"
+
+    # First, ensure local network is always accessible
+    ${pkgs.iproute2}/bin/ip route add 192.168.0.0/24 via 192.168.0.1 dev wlp7s0 metric 50 || true
+
+    # Ensure WireGuard endpoint is routable (if not already handled)
+    ${pkgs.iproute2}/bin/ip route add 23.168.216.127 via 192.168.0.1 dev wlp7s0 || true
+
+    # Now set default route through VPN
+    ${pkgs.iproute2}/bin/ip route del default via 192.168.0.1 || true
+    ${pkgs.iproute2}/bin/ip route add default via 10.0.0.2 dev vm-mullvad metric 100
+  '';
+
+  preStop = ''
+    ${pkgs.iproute2}/bin/ip rule del from 10.0.1.0/24 table 100 2>/dev/null || true
+  '';
+};
+
+  systemd.network = {
+  enable = true;
+
+};
 }
