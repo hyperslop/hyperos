@@ -206,6 +206,7 @@
     protonvpn-gui = "stable";
     python3 = "stable";
     shadps4 = "stable";
+    flycast = "stable";
 
     sonobus = "flatpak";
     xnviewmp = "flatpak";

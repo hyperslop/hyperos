@@ -17,7 +17,8 @@
   hyperos.programs.all.enable = true;
   hyperos.system.all.enable = true;
   hyperos.hardware.all.enable = true;
-  hyperos.vms.all.enable = false;
+  hyperos.vms.graphics-vm.enable = false;
+  hyperos.vms.mullvad-vpn-vm.enable = false;
 
   hyperos.hardware.nvidia.enable = lib.mkForce false;
 
@@ -34,6 +35,7 @@
   };
 
   networking.hostName = "laptop"; # Define your hostname.
+  networking.firewall.enable = true;
     networking.firewall.allowedTCPPorts = [ 8554 ];
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 

@@ -111,6 +111,7 @@
           ./lib
           nixos-hardware.nixosModules.lenovo-thinkpad-t440p
           nix-flatpak.nixosModules.nix-flatpak
+          microvm.nixosModules.host
         ];
       };
     } // availableVms;  # Merge in all VMs
