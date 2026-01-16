@@ -12,7 +12,7 @@
         "bluetooth.ldac" = {
           "monitor.bluez.properties" = {
             "bluez5.enable-ldac" = true;
-            "bluez5.ldac.quality" = "hq"; # hq = 96k/24b
+            #"bluez5.ldac.quality" = "hq"; # hq = 96k/24b
             };
           };
         };

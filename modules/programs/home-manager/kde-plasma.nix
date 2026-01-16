@@ -15,7 +15,10 @@
 
   shortcuts = {
     "kwin" = {
-      "Window Close" = "Ctrl+Q";
+      "Window Close" = "Meta+Q";
+    };
+    "plasmashell" = {
+      "manage activities" = "none";  # Disable Meta+Q for activities
     };
   };
 

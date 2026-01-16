@@ -4,7 +4,7 @@ with lib;
 
 let
   cfg = config.hyperos.vms.mullvad-vpn-vm;
-  mullvadPrivateKey = "PLACEHOLDER";
+  mullvadPrivateKey = "aFmdXy2+6/a3pw5ttpNI3Owto/1dD7/fv+5TaH3PDnc=";
 in
 {
   options.hyperos.vms.mullvad-vpn-vm = {
