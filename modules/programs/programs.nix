@@ -38,6 +38,13 @@
     "nftables"
     "dnsutils"
 
+    "p7zip"
+    "amf"
+
+    "obs-studio"
+
+    "clinfo"
+    "gpu-viewer"
     /**** DESKTOP ****/
 
     "hyprland"
@@ -198,7 +205,6 @@
   ];
 
   packageSources = {
-    davinci-resolve = "stable";
     azahar = "stable";
     rpcs3 = "stable";
     ollama = "stable";
@@ -214,5 +220,6 @@
 
     sddm = null;
     kde-plasma = null;
+    obs-studio = null;
   };
 }
