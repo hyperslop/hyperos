@@ -4,18 +4,24 @@
   config = lib.mkIf config.hyperos.system.xdg-portal.enable {
     xdg.portal = {
       enable = true;
-      extraPortals = [ pkgs.kdePackages.xdg-desktop-portal-kde ];
+      extraPortals = [
+        pkgs.xdg-desktop-portal-gtk
+        pkgs.xdg-desktop-portal-wlr
+      ];
+      xdgOpenUsePortal = true;
       config = {
         common = {
-          default = [ "kde" ];
+          default = [ "gtk" ];
+          "org.freedesktop.impl.portal.ScreenCast" = [ "wlr" ];
+          "org.freedesktop.impl.portal.Screenshot" = [ "wlr" ];
         };
 
-        kde= {
+        kde = {
           default = [ "kde" ];
-          "org.freedesktop.impl.portal.Secret" = ["kwallet"];
-          };
-        };
+          "org.freedesktop.impl.portal.Secret" = [ "kwallet" ];
+          "org.freedesktop.impl.portal.ScreenCast" = [ "kde" ];
         };
       };
-    #  xdgOpenUsePortal = true;  # Force xdg-open to use portals
+    };
+  };
 }
