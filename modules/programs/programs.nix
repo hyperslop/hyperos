@@ -45,6 +45,9 @@
 
     "clinfo"
     "gpu-viewer"
+    "rstudioWrapper"
+
+    "nodsjs"
     /**** DESKTOP ****/
 
     "hyprland"

@@ -8,7 +8,7 @@
         pkgs.xdg-desktop-portal-gtk
         pkgs.xdg-desktop-portal-wlr
       ];
-      xdgOpenUsePortal = true;
+      #xdgOpenUsePortal = true;
       config = {
         common = {
           default = [ "gtk" ];

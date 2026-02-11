@@ -98,6 +98,7 @@
           ./lib
           nix-flatpak.nixosModules.nix-flatpak
           microvm.nixosModules.host
+          inputs.sops-nix.nixosModules.sops
         ];
       };
 
@@ -121,6 +122,49 @@
       type = "app";
       program = "${vm.config.microvm.declaredRunner}/bin/microvm-run";
    }) availableVms;
+
+    devShells.${system} = {
+
+    nodejs = pkgs.mkShell {
+    buildInputs = with pkgs; [
+      nodejs_22
+      nodePackages.npm
+      # nodePackages.typescript
+      # nodePackages.typescript-language-server
+    ];
+
+    shellHook = ''
+      echo "Node.js development environment"
+      echo "Node: $(node --version)"
+      echo "npm: $(npm --version)"
+    '';
+    };
+
+    python = pkgs.mkShell {
+    buildInputs = with pkgs; [
+      python3
+      python3Packages.pip
+      python3Packages.virtualenv
+      # Add other Python packages you commonly use:
+      # python3Packages.requests
+      # python3Packages.numpy
+      # python3Packages.pandas
+    ];
+
+    shellHook = ''
+      echo "Python development environment"
+      echo "Python version: $(python --version)"
+      echo "pip version: $(pip --version)"
+
+      # Optionally auto-create/activate a virtual environment
+      # if [ ! -d .venv ]; then
+      #   python -m venv .venv
+      # fi
+      # source .venv/bin/activate
+    '';
+    };
+
+    };
 
   };
 }
