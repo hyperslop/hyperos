@@ -4,7 +4,6 @@ with lib;
 
 let
   cfg = config.hyperos.vms.mullvad-vpn-vm;
-  mullvadPrivateKey = "aFmdXy2+6/a3pw5ttpNI3Owto/1dD7/fv+5TaH3PDnc=";
 in
 {
   options.hyperos.vms.mullvad-vpn-vm = {
@@ -12,6 +11,17 @@ in
   };
 
   config = mkIf cfg.enable {
+
+    # Decrypt the secret on the HOST
+    sops = {
+      defaultSopsFile = ../../secrets/mullvad/secrets.yaml; # adjust path to your secrets file
+      age.keyFile = "/var/lib/sops-nix/key.txt"; # or wherever your age key lives
+
+      secrets."mullvad-private-key" = {
+        # This will decrypt to /run/secrets/mullvad-private-key on the host
+      };
+    };
+
     # Host network configuration
     systemd.network = {
       enable = true;
@@ -33,7 +43,6 @@ in
           IPMasquerade = "both";
         };
 
-        # Routes for table 100
         routes = [
           {
             Gateway = "10.0.0.2";
@@ -46,8 +55,6 @@ in
         ];
       };
     };
-
-    # Enable IP forwarding on host
 
     microvm.vms.mullvad-vpn-vm = {
       specialArgs = { inherit inputs; };
@@ -65,15 +72,16 @@ in
             id = "vm-mullvad";
             mac = "02:00:00:02:02:02";
           }];
+
+          shares = [{
+            tag = "secrets";
+            source = "/run/secrets";  # host path where sops decrypts
+            mountPoint = "/secrets";
+            proto = "virtiofs";
+          }];
         };
 
-        services.openssh = {
-          enable = true;
-          settings.PermitRootLogin = "yes";
-          settings.PermitEmptyPasswords = "yes";
-        };
-
-        users.users.root.password = "root";
+        # ... rest of VM config stays the same, but change the WireGuard key:
 
         networking = {
           hostName = "mullvad-vpn-vm";
@@ -93,34 +101,21 @@ in
             interface = "eth0";
           };
 
-          # CRITICAL: Route WireGuard endpoint through eth0, not the tunnel
           localCommands = ''
-            # Add route for WireGuard endpoint through physical gateway
             ${pkgs.iproute2}/bin/ip route add 23.168.216.127 via 10.0.0.1 dev eth0
-
-            # Now set default route through WireGuard
             ${pkgs.iproute2}/bin/ip route del default || true
             ${pkgs.iproute2}/bin/ip route add default dev wg-mullvad
           '';
 
-          # Don't set nameservers here - let resolved handle it
-          # nameservers = [ "1.1.1.1" "8.8.8.8" ];
-
           firewall = {
             enable = true;
             trustedInterfaces = [ "wg-mullvad" "eth0" ];
-
             extraCommands = ''
-              # Accept from trusted interfaces
               iptables -A INPUT -i lo -j ACCEPT
               iptables -A INPUT -i eth0 -j ACCEPT
               iptables -A INPUT -i wg-mullvad -j ACCEPT
-
-              # Forward traffic from graphics-vm (via host NAT) through VPN
               iptables -A FORWARD -i eth0 -o wg-mullvad -j ACCEPT
               iptables -A FORWARD -i wg-mullvad -o eth0 -m state --state RELATED,ESTABLISHED -j ACCEPT
-
-              # NAT all outgoing traffic through WireGuard
               iptables -t nat -A POSTROUTING -o wg-mullvad -j MASQUERADE
             '';
           };
@@ -131,9 +126,9 @@ in
               "fc00:bbbb:bbbb:bb01::5:ed89/128"
             ];
 
-            privateKey = mullvadPrivateKey;
+            # Read the key from the shared mount at runtime
+            privateKeyFile = "/secrets/mullvad-private-key";
 
-            # Set MTU to avoid fragmentation issues in VM
             mtu = 1420;
 
             peers = [{
@@ -151,6 +146,14 @@ in
           fallbackDns = [ "1.1.1.1" "8.8.8.8" ];
         };
 
+        services.openssh = {
+          enable = true;
+          settings.PermitRootLogin = "yes";
+          settings.PermitEmptyPasswords = "yes";
+        };
+
+        users.users.root.password = "root";
+
         boot.kernel.sysctl = {
           "net.ipv4.ip_forward" = 1;
           "net.ipv6.conf.all.forwarding" = 1;
@@ -159,13 +162,7 @@ in
         system.stateVersion = "24.05";
 
         environment.systemPackages = with pkgs; [
-          wireguard-tools
-          iputils
-          tcpdump
-          curl
-          bind
-          jq
-          iptables
+          wireguard-tools iputils tcpdump curl bind jq iptables
         ];
       };
     };
