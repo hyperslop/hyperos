@@ -5,7 +5,7 @@
     [
       ./hardware.nix
       ./../../homes/hyper/hyper.nix
-      ./../../lib
+      #./../../lib
 
       inputs.home-manager.nixosModules.default
 

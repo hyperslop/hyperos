@@ -219,9 +219,14 @@
     ollama = "stable";
     ollama-cuda = "stable";
     protonvpn-gui = "stable";
-    python3 = "stable";
     shadps4 = "stable";
     flycast = "stable";
+    qgis = "stable";
+    krita = "stable";
+    dwarfs = "stable";
+    rstudioWrapper = "stable";
+    freecad = "stable";
+
 
     sonobus = "flatpak";
     xnviewmp = "flatpak";

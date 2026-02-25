@@ -1,10 +1,8 @@
-{ inputs }:
-{
-  # GPU-enabled cloud-hypervisor (from microvm.nix)
-  cloud-hypervisor-gpu = import ./cloud-hypervisor-gpu.nix { inherit inputs; };
+{ inputs, system, ... }:
 
-  # Your custom overlays
- # myCustomOverlay = final: prev: {
- #   # your packages here
- # };
-}
+let
+  overlayFiles = builtins.filter
+    (f: f != "default.nix" && builtins.match ".*\\.nix" f != null)
+    (builtins.attrNames (builtins.readDir ./.));
+in
+  map (f: import ./${f} { inherit inputs system; }) overlayFiles

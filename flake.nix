@@ -39,6 +39,7 @@
 
     microvm = {
       url = "github:microvm-nix/microvm.nix";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
 
    spectrum-os = {
@@ -63,14 +64,23 @@
   }@inputs:
   let
     system = "x86_64-linux";
+
+    # Shared nixpkgs config — applied to all nixpkgs instances
+    sharedNixpkgsConfig = {
+      allowUnfree = true;
+      allowBroken = true;
+      permittedInsecurePackages = [
+        "electron-36.9.5"
+      ];
+    };
+
     pkgs = nixpkgs.legacyPackages.${system};
     pkgs-stable = import nixpkgs-stable {
       inherit system;
-      config.allowUnfree = true;
+      config = sharedNixpkgsConfig;
     };
 
-    # Import all VMs using the mkVms helper
-#    overlays = import ./overlays { inherit inputs; };
+    overlays = import ./overlays { inherit inputs system; };
     availableVms = import ./lib/mkVms.nix { inherit inputs; };
 
   in {
@@ -81,6 +91,10 @@
           inherit pkgs-stable;
         };
         modules = [
+          {
+            nixpkgs.overlays = overlays;
+            nixpkgs.config = sharedNixpkgsConfig;
+          }
           ./hosts/default/hardware.nix
           ./hosts/default/default.nix
           ./lib
@@ -94,6 +108,10 @@
           inherit pkgs-stable;
         };
         modules = [
+          {
+            nixpkgs.overlays = overlays;
+            nixpkgs.config = sharedNixpkgsConfig;
+          }
           ./hosts/pc/default.nix
           ./lib
           nix-flatpak.nixosModules.nix-flatpak
@@ -108,6 +126,10 @@
           inherit pkgs-stable;
         };
         modules = [
+          {
+            nixpkgs.overlays = overlays;
+            nixpkgs.config = sharedNixpkgsConfig;
+          }
           ./hosts/laptop/default.nix
           ./lib
           nixos-hardware.nixosModules.lenovo-thinkpad-t440p
@@ -122,6 +144,7 @@
       type = "app";
       program = "${vm.config.microvm.declaredRunner}/bin/microvm-run";
    }) availableVms;
+
 
     devShells.${system} = {
 
