@@ -48,6 +48,12 @@
     "rstudioWrapper"
 
     "nodsjs"
+
+    "vscodium-fhs"
+    "psmisc"
+    "dwarfs"
+
+    "claude-code"
     /**** DESKTOP ****/
 
     "hyprland"
