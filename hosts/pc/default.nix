@@ -26,6 +26,7 @@
   #hyperos.vms.graphics-vm-old.enable = true;
   hyperos.vms.mullvad-vpn-vm.enable = true;
   #hyperos.profiles.basic.enable = true;
+  programs.nix-ld.enable = true;
 
   hyperos.users = [ "hyper" ];
   home-manager = {
@@ -41,6 +42,7 @@
 
   networking.hostName = "pc"; # Define your hostname.
   networking.firewall.enable = true;
+  networking.firewall.allowedTCPPorts = [ 3001 ];
 
   boot.kernel.sysctl = {
     "net.ipv4.ip_forward" = 1;
