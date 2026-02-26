@@ -41,12 +41,14 @@
     };
 
     # User-level persistence
-    environment.persistence."/persist/home" = {
+    environment.persistence."/persist" = {
       hideMounts = true;
-      allowOther = true;
 
       users.hyper = {
         directories = [
+          # hyperos
+          "hyperos"
+
           # Browser
           ".mozilla"
 

@@ -18,14 +18,13 @@
 
   hyperos.programs.all.enable = true;
   hyperos.system.all.enable = true;
-  hyperos.system.impermanence.enable = true;
+  #hyperos.system.impermanence.enable = true;
 
   hyperos.hardware.all.enable = true;
   hyperos.hardware.nvidia.enable = false;
 
-  hyperos.vms.graphics-vm.enable = true;
-  #hyperos.vms.graphics-vm-old.enable = true;
-  hyperos.vms.mullvad-vpn-vm.enable = true;
+  #hyperos.vms.graphics-vm.enable = true;
+  #hyperos.vms.mullvad-vpn-vm.enable = true;
   #hyperos.profiles.basic.enable = true;
   programs.nix-ld.enable = true;
 
