@@ -83,6 +83,7 @@
           ".config/FreeCAD"
 
           # Development
+          ".claude"
           ".config/godot"
           ".config/VSCodium"
           ".vscode-oss"
