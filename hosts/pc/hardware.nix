@@ -14,12 +14,26 @@
   boot.extraModulePackages = [ ];
 
   fileSystems."/" =
-    { device = "/dev/disk/by-uuid/34a7cb5f-dc24-43ea-8451-e67ce8e444d9";
-      fsType = "ext4";
+    { device = "none";
+      fsType = "tmpfs";
+      options = [ "defaults" "size=2G" "mode=755" ];
+    };
+
+  fileSystems."/nix" =
+    { device = "/dev/disk/by-label/nixos";
+      fsType = "btrfs";
+      options = [ "subvol=@nix" "compress=zstd" "noatime" ];
+    };
+
+  fileSystems."/persist" =
+    { device = "/dev/disk/by-label/nixos";
+      fsType = "btrfs";
+      options = [ "subvol=@persist" "compress=zstd" "noatime" ];
+      neededForBoot = true;
     };
 
   fileSystems."/boot" =
-    { device = "/dev/disk/by-uuid/F3B1-D405";
+    { device = "/dev/disk/by-label/boot";
       fsType = "vfat";
       options = [ "fmask=0077" "dmask=0077" ];
     };

@@ -46,6 +46,8 @@
       url = "git+https://spectrum-os.org/git/nixpkgs";
       flake = false;  # It's not a flake, just a nixpkgs fork
     };
+
+    impermanence.url = "github:nix-community/impermanence";
   };
 
   outputs = {
@@ -60,6 +62,7 @@
     microvm,
     sops-nix,
     spectrum-os,
+    impermanence,
     ...
   }@inputs:
   let
@@ -117,6 +120,7 @@
           nix-flatpak.nixosModules.nix-flatpak
           microvm.nixosModules.host
           inputs.sops-nix.nixosModules.sops
+          impermanence.nixosModules.impermanence
         ];
       };
 
@@ -135,6 +139,7 @@
           nixos-hardware.nixosModules.lenovo-thinkpad-t440p
           nix-flatpak.nixosModules.nix-flatpak
           microvm.nixosModules.host
+          impermanence.nixosModules.impermanence
         ];
       };
     } // availableVms;  # Merge in all VMs

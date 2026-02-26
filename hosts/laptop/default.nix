@@ -16,6 +16,7 @@
 
   hyperos.programs.all.enable = true;
   hyperos.system.all.enable = true;
+  hyperos.system.impermanence.enable = true;
   hyperos.hardware.all.enable = true;
   hyperos.vms.graphics-vm.enable = false;
   hyperos.vms.mullvad-vpn-vm.enable = false;

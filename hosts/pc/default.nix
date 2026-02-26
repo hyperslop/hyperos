@@ -18,6 +18,7 @@
 
   hyperos.programs.all.enable = true;
   hyperos.system.all.enable = true;
+  hyperos.system.impermanence.enable = true;
 
   hyperos.hardware.all.enable = true;
   hyperos.hardware.nvidia.enable = false;
