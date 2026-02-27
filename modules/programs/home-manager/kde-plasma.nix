@@ -41,8 +41,11 @@
           "org.kde.plasma.icontasks"         # Task manager (your taskbar)
           "org.kde.plasma.marginsseparator"  # Spacer
           "org.kde.plasma.systemtray"        # System tray
-          "org.kde.plasma.digitalclock"      # Clock
           "org.kde.plasma.activitypager"
+          "org.kde.plasma.networkmanagement" # WiFi / Network
+          "org.kde.plasma.digitalclock"      # Clock
+          "org.kde.plasma.volume"            # Sound / Volume
+          "org.kde.plasma.brightness"        # Brightness
         ];
       }
     ];
