@@ -62,6 +62,7 @@
           ".local/share/kwalletd"
           ".local/share/kscreen"
           ".local/share/baloo"
+          ".local/share/plasma"
 
           # Media & communication
           ".config/FreeTube"
@@ -129,6 +130,9 @@
 
         files = [
           ".bash_history"
+          ".claude.json"
+          ".config/plasma-org.kde.plasma.desktop-appletsrc"
+          ".config/plasmashellrc"
         ];
       };
     };
