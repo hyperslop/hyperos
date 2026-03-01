@@ -44,6 +44,7 @@
 
   networking.hostName = "pc"; # Define your hostname.
   networking.firewall.enable = true;
-  networking.firewall.allowedTCPPorts = [ 3001 ];
+  networking.firewall.allowedTCPPorts = [ 3001 ] ++ (builtins.genList (n: 1716 + n) 49);
+  networking.firewall.allowedUDPPorts = [ 1716 ];
 
 }

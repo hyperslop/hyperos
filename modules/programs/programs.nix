@@ -75,6 +75,7 @@
         "mpv"
       /* MISC */
         "gnome-disk-utility"
+        "kdePackages.kdeconnect-kde"
 
     /**** ONLINE-COMMUNICATION ****/
 
