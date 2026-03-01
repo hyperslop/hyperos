@@ -131,9 +131,42 @@
         files = [
           ".bash_history"
           ".claude.json"
+          ".config/kwinoutputconfig.json"
           ".config/plasma-org.kde.plasma.desktop-appletsrc"
           ".config/plasmashellrc"
+          ".local/share/user-places.xbel"
         ];
+      };
+    };
+
+    # Sync symlinked files back to persist every 5 minutes
+    # Needed because atomic writes (rename) replace symlinks with real ephemeral files
+    home-manager.users.hyper = {
+      systemd.user.services.persist-sync = {
+        Unit.Description = "Sync files to persist";
+        Service = {
+          Type = "oneshot";
+          ExecStart = pkgs.writeShellScript "persist-sync" ''
+            for file in \
+              .claude.json \
+              .config/kwinoutputconfig.json \
+              .config/plasma-org.kde.plasma.desktop-appletsrc \
+              .config/plasmashellrc \
+              .local/share/user-places.xbel
+            do
+              [ -f "$HOME/$file" ] && ${pkgs.coreutils}/bin/cp -u "$HOME/$file" "/persist/home/hyper/$file"
+            done
+          '';
+        };
+      };
+
+      systemd.user.timers.persist-sync = {
+        Unit.Description = "Sync files to persist every 5 minutes";
+        Timer = {
+          OnBootSec = "5min";
+          OnUnitActiveSec = "5min";
+        };
+        Install.WantedBy = [ "timers.target" ];
       };
     };
 

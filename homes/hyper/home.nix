@@ -6,7 +6,7 @@
     #./../../modules/home-manager/git.nix
     #./../../modules/home-manager/hyprland.nix
     #./../../modules/home-manager/kde.nix
-    ./home-manager/firefox.nix
+    ./home-manager/firefox.override.nix
   ];
 
   home.username = "hyper";

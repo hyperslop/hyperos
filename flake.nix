@@ -92,6 +92,7 @@
         specialArgs = {
           inherit inputs;
           inherit pkgs-stable;
+          hostname = "default";
         };
         modules = [
           {
@@ -109,6 +110,7 @@
         specialArgs = {
           inherit inputs;
           inherit pkgs-stable;
+          hostname = "pc";
         };
         modules = [
           {
@@ -128,6 +130,7 @@
         specialArgs = {
           inherit inputs;
           inherit pkgs-stable;
+          hostname = "laptop";
         };
         modules = [
           {

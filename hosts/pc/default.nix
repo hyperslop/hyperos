@@ -40,6 +40,8 @@
     backupFileExtension = "backup";
   };
 
+  environment.systemPackages = with pkgs; [ flatpak-builder ];
+
   networking.hostName = "pc"; # Define your hostname.
   networking.firewall.enable = true;
   networking.firewall.allowedTCPPorts = [ 3001 ];

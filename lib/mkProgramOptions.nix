@@ -4,92 +4,95 @@
 # 1. Reads programs.nix as the single source of truth
 # 2. Creates hyperos.programs.PROGRAM.enable options for each program
 # 3. Automatically installs packages from nixpkgs (default: unstable, overridable)
-# 4. Auto-imports configs with priority override system:
+# 4. Auto-imports configs with multi-tier stacking and override support:
 #
 #    NixOS configs (system-wide):
-#      Priority 2 (lowest):  modules/programs/nixos/PROGRAM.nix
-#      Priority 1 (highest): hosts/HOST/nixos/PROGRAM.nix
+#      Tier 1 (lowest):  modules/programs/nixos/PROGRAM.nix
+#      Tier 2:           hosts/HOST/nixos/PROGRAM[.override].nix
+#      Tier 3 (highest): homes/USER/nixos/PROGRAM[.override].nix
 #
-#    Home-Manager configs (imported as sharedModules with lib.mkOptionDefault):
-#      Priority 3 (lowest):  modules/programs/home-manager/PROGRAM.nix
-#      Priority 2:           hosts/HOST/home-manager/PROGRAM.nix
-#      Priority 1 (highest): homes/USER/home-manager/PROGRAM.nix (for specified users)
+#    Home-Manager configs (imported as sharedModules):
+#      Tier 1 (lowest):  modules/programs/home-manager/PROGRAM.nix
+#      Tier 2:           hosts/HOST/home-manager/PROGRAM[.override].nix
+#      Tier 3 (highest): homes/USER/home-manager/PROGRAM[.override].nix
+#
+#    Naming convention:
+#      PROGRAM.nix          → merged with all lower-priority configs (default)
+#      PROGRAM.override.nix → replaces all lower-priority configs (those are not imported)
 #
 # 5. Provides hyperos.programs.all.enable to enable everything at once
-# 6. Set hyperos.users = [ "alice" "bob" ] to enable per-user home-manager imports
+# 6. hostname is passed via specialArgs from flake.nix (e.g. hostname = "pc")
 
-{ lib, config, pkgs, ... }@args:
+{ lib, config, pkgs, hostname ? "default", ... }@args:
 
 let
+  helpers = import ./mkOverrideHelpers.nix { inherit lib; };
+  inherit (helpers) resolveFile resolveFiles;
+
   # Import the program registry
   registry = import ../modules/programs/programs.nix;
 
-  # Helper to check if a file exists
-  fileExists = path: builtins.pathExists path;
+  # Static scan of homes/ directory — used for both NixOS and HM user configs.
+  # Evaluated at import time so it can be used in the `imports` list.
+  homeUsers =
+    if builtins.pathExists ../homes
+    then builtins.attrNames (lib.filterAttrs (_: v: v == "directory") (builtins.readDir ../homes))
+    else [];
 
-  # Helper to get the package source (default/stable/null) default is unstable, unless it got changed randomly
+  # ---------------------------------------------------------------------------
+  # Package helpers (unchanged from original)
+  # ---------------------------------------------------------------------------
+
   getPackageSource = programName:
     registry.packageSources.${programName} or "default";
 
-  # Helper to resolve nested package names
   getPackageFromPath = packageName: pkgSet:
     if packageName == null || pkgSet == null then null
     else lib.attrByPath (lib.splitString "." packageName) null pkgSet;
 
-  # Resolve which pkgs to use based on packageSource
   resolvePkgSet = packageSource:
     if packageSource == null then null
     else if packageSource == "flatpak" then null
     else if packageSource == "default" then pkgs
-    else
-      # Look for pkgs-stable, pkgs-(commit), etc. in function args
-      args.${"pkgs-" + packageSource} or pkgs;
+    else args.${"pkgs-" + packageSource} or pkgs;
 
-  # Gets hostname from networking.hostName, make a hyperos.host option later?
-  hostname =
-    if args ? networking && args.networking ? hostName
-    then args.networking.hostName
-    else "unknown";
+  # ---------------------------------------------------------------------------
+  # Multi-tier config file resolution
+  # ---------------------------------------------------------------------------
 
-  # Gets config location for a specific program
-  getConfigPaths = programName: {
-    # NixOS configs
-    nixos-global = ../modules/programs/nixos + "/${programName}.nix";
-    nixos-host = ../hosts + "/${hostname}/nixos/${programName}.nix";
-
-    # Home-Manager configs
-    homeManager-global = ../modules/programs/home-manager + "/${programName}.nix";
-    homeManager-host = ../hosts + "/${hostname}/home-manager/${programName}.nix";
-  };
-
-  # User-specific home-manager config
-  getUserHomeManagerPath = programName: username:
-    ../homes + "/${username}/home-manager/${programName}.nix";
-
-  # Select which config files to use
+  # Returns the resolved nixos and home-manager file lists for a program,
+  # with override logic applied across all tiers.
   selectConfigFiles = programName:
     let
-      paths = getConfigPaths programName;
+      # NixOS entries ordered lowest → highest priority
+      nixosEntries =
+        [ (resolveFile (../modules/programs/nixos + "/${programName}.nix"))
+          (resolveFile (../hosts + "/${hostname}/nixos/${programName}.nix"))
+        ] ++ (map (user:
+          resolveFile (../homes + "/${user}/nixos/${programName}.nix")
+        ) homeUsers);
 
-      # For NixOS configs: host overrides global
-      nixosConfig =
-        if fileExists paths.nixos-host then paths.nixos-host
-        else if fileExists paths.nixos-global then paths.nixos-global
-        else null;
+      # Home-Manager entries ordered lowest → highest priority
+      hmEntries =
+        [ (resolveFile (../modules/programs/home-manager + "/${programName}.nix"))
+          (resolveFile (../hosts + "/${hostname}/home-manager/${programName}.nix"))
+        ] ++ (map (user:
+          resolveFile (../homes + "/${user}/home-manager/${programName}.nix")
+        ) homeUsers);
 
-      # For home-manager configs: user overrides host overrides global
-      # user-specific config will be added later RAAAHHH!!
-      baseHomeManagerConfigs = builtins.filter (x: x != null) [
-        (if fileExists paths.homeManager-global then paths.homeManager-global else null)
-        (if fileExists paths.homeManager-host then paths.homeManager-host else null)
-      ];
+      nixosFiles = resolveFiles nixosEntries;
+      hmFiles    = resolveFiles hmEntries;
     in {
-      nixos = nixosConfig;
-      baseHomeManager = baseHomeManagerConfigs;
-      hasBaseHomeManager = baseHomeManagerConfigs != [];
+      nixos              = nixosFiles;
+      homeManager        = hmFiles;
+      hasBaseHomeManager = hmFiles != [];
     };
 
-  # WARNING: BOMBOCLAT RECURSION ERROR
+  # ---------------------------------------------------------------------------
+  # Option definitions
+  # ---------------------------------------------------------------------------
+
+  # WARNING: BOMBOCLAT RECURSION ERROR (keep comment — it's load-bearing)
   programOptions = lib.listToAttrs (map (programName:
     let configs = selectConfigFiles programName;
     in {
@@ -97,81 +100,61 @@ let
       value = {
         enable = lib.mkEnableOption programName;
         enableHomeManager = lib.mkOption {
-          type = lib.types.bool;
+          type    = lib.types.bool;
           default = configs.hasBaseHomeManager;
         };
       };
     }
   ) registry.all);
 
-  #-------------------------
+  # ---------------------------------------------------------------------------
+  # Per-program config application
+  # ---------------------------------------------------------------------------
 
   mkProgramConfig = programName:
     let
-      cfg = config.hyperos.programs.${programName};
+      cfg           = config.hyperos.programs.${programName};
       packageSource = getPackageSource programName;
-      pkgSet = resolvePkgSet packageSource;
-      package = getPackageFromPath programName pkgSet;
-      configs = selectConfigFiles programName;
-
-      # Get user-specific configs for all specified users
-      userHomeManagerConfigs =
-        map (username: getUserHomeManagerPath programName username)
-            config.hyperos.users;
-
-      # Filter to only existing files
-      existingUserConfigs = builtins.filter fileExists userHomeManagerConfigs;
-
-      # Combine all home-manager configs: base + user-specific
-      # Later configs in the list have higher priority
-      allHomeManagerConfigs = configs.baseHomeManager ++ existingUserConfigs;
-
-      # Select only the highest priority (last) config
-      highestPriorityConfig =
-        if allHomeManagerConfigs != []
-        then builtins.elemAt allHomeManagerConfigs ((builtins.length allHomeManagerConfigs) - 1)
-        else null;
+      pkgSet        = resolvePkgSet packageSource;
+      package       = getPackageFromPath programName pkgSet;
+      configs       = selectConfigFiles programName;
     in
     lib.mkIf cfg.enable (lib.mkMerge [
-      # Install the package if it exists
+      # Install the package if it exists in the resolved pkg set
       (lib.mkIf (packageSource != null && package != null) {
         environment.systemPackages = [ package ];
       })
 
-      # Warn if package not found
+      # Warn if the package name isn't found in the chosen pkg set
       (lib.mkIf (packageSource != null && package == null) {
         warnings = [
           "Package '${programName}' not found in '${packageSource}' package set"
         ];
       })
 
-      # Import ONLY the highest priority home-manager config if it exists and is enabled
-      (lib.mkIf (highestPriorityConfig != null && cfg.enableHomeManager) {
-        home-manager.sharedModules = [ highestPriorityConfig ];
+      # Import ALL resolved home-manager configs (stacked; lower tiers use lib.mkDefault)
+      (lib.mkIf (configs.homeManager != [] && cfg.enableHomeManager) {
+        home-manager.sharedModules = configs.homeManager;
       })
     ]);
 
-  # Collect all NixOS config files
-  nixosConfigModules = builtins.filter
-    (path: path != null)
-    (map (programName: (selectConfigFiles programName).nixos) registry.all);
+  # Collect all NixOS config files across all tiers for all programs.
+  # Files self-guard with lib.mkIf config.hyperos.programs.PROG.enable.
+  nixosConfigModules =
+    lib.flatten (map (programName: (selectConfigFiles programName).nixos) registry.all);
 
 in
 {
   options.hyperos = {
     programs = programOptions // {
-      # Special option to enable all programs at once, move this to some place to do with profiles when you make them
       all.enable = lib.mkEnableOption "all programs in the registry";
     };
 
-    # add the list of users in host file, move this when needed shouldn't be here dont care right now
     users = lib.mkOption {
-      type = lib.types.listOf lib.types.str;
+      type    = lib.types.listOf lib.types.str;
       default = [];
     };
   };
-
-  #---------------------------------
 
   config = lib.mkMerge [
     # When all.enable is true, enable all programs with mkDefault
@@ -185,6 +168,6 @@ in
     (lib.mkMerge (map mkProgramConfig registry.all))
   ];
 
-  # Import all NixOS config files (they contain their own mkIf guards)
+  # Import all resolved NixOS config files (they contain their own mkIf guards)
   imports = nixosConfigModules;
 }
